@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>HTML 5 Boilerplate</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <p>Hello World</p>
+</body>
+<script>
+
+  const Http = new XMLHttpRequest();
+  const url = 'http://localhost:8000/info_all';
+  Http.open("GET", url);
+  Http.send();
+
+
+
+
+  Http.onreadystatechange = (e) => {
+
+    
+
+
+    function tableCreate() {
+      const body = document.body,
+        tbl = document.createElement('table');
+      tbl.style.width = '100px';
+      tbl.style.border = '1px solid black';
+
+      for (let i = 0; i < 3; i++) {
+        const tr = tbl.insertRow();
+        for (let j = 0; j < 2; j++) {
+          const td = tr.insertCell();
+          td.appendChild(document.createTextNode(`Cell I${i}/J${j}`));
+          td.style.border = '1px solid black';
+        }
+      }
+      body.appendChild(tbl);
+    }
+
+    tableCreate();
+  }
+
+
+
+
+
+</script>
+
+</html>

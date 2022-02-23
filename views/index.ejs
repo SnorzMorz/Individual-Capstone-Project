@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>HTML 5 Boilerplate</title>
+</head>
+
+<body>
+
+  <style>
+    .tooltip .tooltiptext-right {
+      font-family: "Roboto", sans-serif;
+      font-size: 12px;
+      visibility: hidden;
+      width: 240px;
+      color: #EEEFEF;
+      background-color: rgb(33, 33, 33);
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+      top: -5px;
+      left: 75%;
+
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .tooltip:hover .tooltiptext-right {
+      visibility: visible;
+    }
+
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext-top {
+      font-family: "Roboto", sans-serif;
+      font-size: 12px;
+      visibility: hidden;
+      width: 240px;
+      color: #EEEFEF;
+      background-color: rgb(33, 33, 33);
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -120px;
+
+      /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .tooltip:hover .tooltiptext-right {
+      visibility: visible;
+      opacity: 1;
+    }
+
+
+    .tooltip:hover .tooltiptext-top {
+      visibility: visible;
+      opacity: 1;
+    }
+
+
+    .round {
+      border-radius: 12px;
+      background: #1C222C;
+
+    }
+
+    .vertical-center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+
+    .article {
+      font-size: 0.8vw;
+      text-align: center;
+    }
+
+    .article a {
+      color: #EEEFEF;
+    }
+
+
+
+
+
+    .container {
+      font-family: "Roboto", sans-serif;
+      overflow: hidden;
+      color: #EEEFEF;
+      background-color: #161B23;
+      display: grid;
+      grid-template-columns: 25% 50% 25%;
+      grid-template-rows: 1fr 1fr 1fr;
+      padding-left: 0%;
+      padding-right: 0%;
+      margin-top: 5%;
+      margin-bottom: 5%;
+      gap: 1% 0.5%;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "STOCK-SUMMARY STOCK-PRICE-CHART NEWEST-ANALYST-RATINGS"
+        "SENTIMENT-PIE-CHART DATA STOCK-PRICE-PREDICTION"
+        "TOPIC-PIE-CHART SENTIMENT-BAR-CHART ANALYST-SENTIMENT-BAR-CHART";
+    }
+
+    .name {
+      color: #7E8185;
+      padding-top: 3%
+    }
+
+    .STOCK-PRICE-CHART {
+      grid-area: STOCK-PRICE-CHART;
+    }
+
+    .SENTIMENT-PIE-CHART {
+      grid-area: SENTIMENT-PIE-CHART;
+    }
+
+    .DATA {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 5px 5px;
+      grid-template-areas:
+        "ANALYSIS-SUMMARY LATEST-ARTICLES";
+      grid-area: DATA;
+    }
+
+    .ANALYSIS-SUMMARY {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 2fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "RATING-GAUGE-LOCATION"
+        "SUMMARY-1"
+        "SUMMARY-2"
+        "SUMMARY-3"
+        "SUMMARY-4"
+        "SUMMARY-5";
+      grid-area: ANALYSIS-SUMMARY;
+    }
+
+    .RATING-GAUGE-LOCATION {
+      grid-area: RATING-GAUGE-LOCATION;
+    }
+
+    .SUMMARY-1 {
+      grid-area: SUMMARY-1;
+    }
+
+    .SUMMARY-2 {
+      grid-area: SUMMARY-2;
+    }
+
+    .SUMMARY-3 {
+      grid-area: SUMMARY-3;
+    }
+
+    .SUMMARY-4 {
+      grid-area: SUMMARY-4;
+    }
+
+    .SUMMARY-5 {
+      grid-area: SUMMARY-5;
+    }
+
+    .LATEST-ARTICLES {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "LATEST-ARTICLE-NAME"
+        "ARTICLE-1"
+        "ARTICLE-2"
+        "ARTICLE-3"
+        "ARTICLE-4";
+      grid-area: LATEST-ARTICLES;
+    }
+
+    .LATEST-ARTICLES {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "LATEST-ARTICLE-NAME"
+        "ARTICLE-1"
+        "ARTICLE-2"
+        "ARTICLE-3"
+        "ARTICLE-4";
+      grid-area: LATEST-ARTICLES;
+    }
+
+    .ARTICLE-1 {
+      display: grid;
+      grid-template-columns: 0.8fr 1.6fr 0.6fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "PUBL-1 TITLE-1 SENT-1";
+      grid-area: ARTICLE-1;
+    }
+
+    .ARTICLE-2::before {
+      content: '';
+      padding-top: 10%;
+      display: block;
+      position: relative;
+      top: 0;
+      width: 350%;
+      left: 12%;
+      border-top: 2px solid #7E8185;
+    }
+
+    .ARTICLE-1::before {
+      content: '';
+      padding-top: 10%;
+      display: block;
+      position: relative;
+      top: 0;
+      width: 350%;
+      left: 12%;
+      border-top: 2px solid #7E8185;
+    }
+
+    .ARTICLE-3::before {
+      content: '';
+      padding-top: 10%;
+      display: block;
+      position: relative;
+      top: 0;
+      width: 350%;
+      left: 12%;
+      border-top: 2px solid #7E8185;
+    }
+
+    .ARTICLE-4::before {
+      content: '';
+      padding-top: 10%;
+      display: block;
+      position: relative;
+      top: 0;
+      width: 350%;
+      left: 12%;
+      border-top: 2px solid #7E8185;
+    }
+
+    .PUBL-1 {
+      grid-area: PUBL-1;
+    }
+
+    .TITLE-1 {
+      grid-area: TITLE-1;
+    }
+
+    .SENT-1 {
+      grid-area: SENT-1;
+    }
+
+    .ARTICLE-2 {
+      display: grid;
+      grid-template-columns: 0.8fr 1.6fr 0.6fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "PUBL-2 TITLE-2 SENT-2";
+      grid-area: ARTICLE-2;
+    }
+
+    .PUBL-2 {
+      grid-area: PUBL-2;
+    }
+
+    .TITLE-2 {
+      grid-area: TITLE-2;
+    }
+
+    .SENT-2 {
+      grid-area: SENT-2;
+    }
+
+    .ARTICLE-3 {
+      display: grid;
+      grid-template-columns: 0.8fr 1.6fr 0.6fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "PUBL-3 TITLE-3 SENT-3";
+      grid-area: ARTICLE-3;
+    }
+
+    .PUBL-3 {
+      grid-area: PUBL-3;
+    }
+
+    .TITLE-3 {
+      grid-area: TITLE-3;
+    }
+
+    .SENT-3 {
+      grid-area: SENT-3;
+    }
+
+    .ARTICLE-4 {
+      display: grid;
+      grid-template-columns: 0.8fr 1.6fr 0.6fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "PUBL-4 TITLE-4 SENT-4";
+      grid-area: ARTICLE-4;
+    }
+
+    .PUBL-4 {
+      grid-area: PUBL-4;
+    }
+
+    .TITLE-4 {
+      grid-area: TITLE-4;
+    }
+
+    .SENT-4 {
+      grid-area: SENT-4;
+    }
+
+    .LATEST-ARTICLE-NAME {
+      grid-area: LATEST-ARTICLE-NAME;
+    }
+
+    .SENTIMENT-BAR-CHART {
+      grid-area: SENTIMENT-BAR-CHART;
+    }
+
+    .TOPIC-PIE-CHART {
+      grid-area: TOPIC-PIE-CHART;
+    }
+
+    .ANALYST-SENTIMENT-BAR-CHART {
+      grid-area: ANALYST-SENTIMENT-BAR-CHART;
+    }
+
+    .NEWEST-ANALYST-RATINGS {
+      font-size: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+      gap: 0px 0px;
+      grid-template-areas: "RATING-TITLE"
+        "RATING-1"
+        "RATING-2"
+        "RATING-3"
+        "RATING-4";
+      grid-area: NEWEST-ANALYST-RATINGS;
+
+    }
+
+    .RATING-1 {
+      display: grid;
+      grid-template-columns: 0.8fr 1fr 1.2fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "COMP-1 GRADE-1 DATE-1";
+      grid-area: RATING-1;
+    }
+
+    .COMP-1 {
+      padding-top: 3%;
+      grid-area: COMP-1;
+    }
+
+    .GRADE-1 {
+      grid-area: GRADE-1;
+    }
+
+    .DATE-1 {
+      grid-area: DATE-1;
+    }
+
+    .RATING-2 {
+      display: grid;
+      grid-template-columns: 0.8fr 1fr 1.2fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "COMP-2 GRADE-2 DATE-2";
+      grid-area: RATING-2;
+    }
+
+    .COMP-2 {
+      grid-area: COMP-2;
+    }
+
+    .GRADE-2 {
+      grid-area: GRADE-2;
+    }
+
+    .DATE-2 {
+      grid-area: DATE-2;
+    }
+
+    .RATING-3 {
+      display: grid;
+      grid-template-columns: 0.8fr 1fr 1.2fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "COMP-3 GRADE-3 DATE-3";
+      grid-area: RATING-3;
+    }
+
+    .COMP-3 {
+      grid-area: COMP-3;
+    }
+
+    .GRADE-3 {
+      grid-area: GRADE-3;
+    }
+
+    .DATE-3 {
+      grid-area: DATE-3;
+    }
+
+    .RATING-4 {
+      display: grid;
+      grid-template-columns: 0.8fr 1fr 1.2fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas:
+        "COMP-4 GRADE-4 DATE-4";
+      grid-area: RATING-4;
+    }
+
+    .COMP-4 {
+      grid-area: COMP-4;
+    }
+
+    .GRADE-4 {
+      grid-area: GRADE-4;
+    }
+
+    .DATE-4 {
+      grid-area: DATE-4;
+    }
+
+    .RATING-TITLE {
+      grid-area: RATING-TITLE;
+    }
+
+    .SENTIMENT-BAR-CHART {
+      grid-area: SENTIMENT-BAR-CHART;
+    }
+
+    .TOPIC-PIE-CHART {
+      grid-area: TOPIC-PIE-CHART;
+    }
+
+    .ANALYST-SENTIMENT-BAR-CHART {
+      grid-area: ANALYST-SENTIMENT-BAR-CHART;
+    }
+
+
+
+    .STOCK-PRICE-PREDICTION {
+      grid-area: STOCK-PRICE-PREDICTION;
+    }
+
+    .STOCK-SUMMARY {
+      font-family: "Arial";
+      color: #EEEFEF;
+      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "TICKER PRICE PRICE"
+        "DIVIDEND VOLATILITY RSI"
+        "PE INSIDER-OWN ANALYST-ESTIMATE";
+      grid-area: STOCK-SUMMARY;
+      font-size: 20px;
+    }
+
+    .TICKER {
+      grid-area: TICKER;
+    }
+
+    .PE {
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.8fr 1.2fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "PE-NAME"
+        "PE-VAL";
+      grid-area: PE;
+    }
+
+    .PE-NAME {
+      grid-area: PE-NAME;
+    }
+
+    .PE-VAL {
+      grid-area: PE-VAL;
+      ;
+    }
+
+    .INSIDER-OWN {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.8fr 1.2fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "INSIDER-OWN-NAME"
+        "INSIDER-OWN-VAL";
+      grid-area: INSIDER-OWN;
+    }
+
+    .INSIDER-OWN-NAME {
+      grid-area: INSIDER-OWN-NAME;
+    }
+
+    .INSIDER-OWN-VAL {
+      grid-area: INSIDER-OWN-VAL;
+    }
+
+    .ANALYST-ESTIMATE {
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.8fr 1.2fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "ANALYST-NAME"
+        "ANALYST-VAL";
+      grid-area: ANALYST-ESTIMATE;
+    }
+
+    .ANALYST-NAME {
+      grid-area: ANALYST-NAME;
+    }
+
+    .ANALYST-VAL {
+      grid-area: ANALYST-VAL;
+    }
+
+    .PRICE {
+      grid-area: PRICE;
+    }
+
+    .RSI {
+      border-radius: 12px;
+      display: grid;
+      grid-template-rows: 0.8fr 1.2fr;
+      grid-auto-columns: 1fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-area: RSI;
+    }
+
+    .RSI-NAME {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+
+    .RSI-VAL {
+      grid-area: 2 / 1 / 3 / 2;
+    }
+
+    .DIVIDEND {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.8fr 1.2fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "DIVIDEND-NAME"
+        "DIVIDEND-VAL";
+      grid-area: DIVIDEND;
+    }
+
+    .DIVIDEND-NAME {
+      grid-area: DIVIDEND-NAME;
+    }
+
+    .DIVIDEND-VAL {
+      grid-area: DIVIDEND-VAL;
+    }
+
+    .VOLATILITY {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.8fr 1.2fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "VOLATILITY-NAME"
+        "VOLATILITY-VAL";
+      grid-area: VOLATILITY;
+    }
+
+    .VOLATILITY-NAME {
+      grid-area: VOLATILITY-NAME;
+    }
+
+    .VOLATILITY-VAL {
+      grid-area: VOLATILITY-VAL;
+    }
+
+
+    html,
+    body,
+    .container {
+      height: 100%;
+      margin: 0;
+
+    }
+
+    /* Add a black background color to the top navigation bar */
+    .topnav {
+      overflow: hidden;
+      background-color: rgb(44, 62, 80);
+    }
+
+    /* Style the links inside the navigation bar */
+    .topnav a {
+      float: left;
+      display: block;
+      color: black;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    /* Change the color of links on hover */
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    /* Style the "active" element to highlight the current page */
+    .topnav a.active {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    /* Style the search box inside the navigation bar */
+    .topnav input[type=text] {
+      float: right;
+      padding: 6px;
+      border: none;
+      margin-top: 8px;
+      margin-right: 16px;
+      font-size: 17px;
+    }
+
+    /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
+    @media screen and (max-width: 600px) {
+
+      .topnav a,
+      .topnav input[type=text] {
+        float: none;
+        display: block;
+        text-align: left;
+        width: 100%;
+        margin: 0;
+        padding: 14px;
+      }
+
+      .topnav input[type=text] {
+        border: 1px solid #ccc;
+      }
+    }
+
+
+    .gauge {
+      margin: auto;
+      width: 60%;
+      max-width: 250px;
+      font-family: "Roboto", sans-serif;
+      font-size: 30px;
+      color: #004033;
+    }
+
+    .gauge__body {
+      box-shadow: 0 -3px 6px 2px rgba(0, 0, 0, 0.50);
+      width: 100%;
+      height: 0;
+      padding-bottom: 50%;
+      background: #b4c0be;
+      position: relative;
+      border-top-left-radius: 100% 200%;
+      border-top-right-radius: 100% 200%;
+      overflow: hidden;
+    }
+
+    .gauge__fill {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: inherit;
+      height: 100%;
+      background: rgb(41, 128, 185);
+      transform-origin: center top;
+      transform: rotate(0.25turn);
+      transition: transform 0.2s ease-out;
+    }
+
+    .gauge__cover {
+      box-shadow: 0 -3px 6px 2px rgba(0, 0, 0, 0.50);
+      width: 75%;
+      height: 150%;
+      background: #1C222C;
+      border-radius: 50%;
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+
+      /* Text */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 25%;
+      box-sizing: border-box;
+    }
+
+
+    /* RATING GAUGE */
+    .gauge-wrapper {
+      display: inline-block;
+      width: auto;
+      margin: 0 auto;
+      /*padding: 20px 15px 15px;*/
+    }
+
+    .gauge-2 {
+      background: #e7e7e7;
+      box-shadow: 0 -3px 6px 2px rgba(0, 0, 0, 0.50);
+      width: 200px;
+      height: 100px;
+      border-radius: 100px 100px 0 0 !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gauge.min-scaled {
+      transform: scale(0.5);
+    }
+
+    .gauge-center {
+      content: '';
+      color: #fff;
+      width: 60%;
+      height: 60%;
+      background: #15222E;
+      border-radius: 100px 100px 0 0 !important;
+      position: absolute;
+      box-shadow: 0 -13px 15px -10px rgba(0, 0, 0, 0.28);
+      right: 21%;
+      bottom: 0;
+      color: #fff;
+      z-index: 10;
+    }
+
+    .gauge-center .label,
+    .gauge-center .number {
+      display: block;
+      width: 100%;
+      text-align: center;
+      border: 0 !important;
+    }
+
+    .gauge-center .label {
+      font-size: 0.75em;
+      opacity: 0.6;
+      margin: 1.1em 0 0.3em 0;
+    }
+
+    .gauge-center .number {
+      font-size: 1.2em;
+    }
+
+    .needle {
+      width: 80px;
+      height: 7px;
+      background: #15222E;
+      border-bottom-left-radius: 100% !important;
+      border-bottom-right-radius: 5px !important;
+      border-top-left-radius: 100% !important;
+      border-top-right-radius: 5px !important;
+      position: absolute;
+      bottom: -2px;
+      left: 20px;
+      transform-origin: 100% 4px;
+      transform: rotate(0deg);
+      box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.38);
+      display: none;
+      z-index: 9;
+    }
+
+    .four.rischio1 .needle {
+      animation: fourspeed1 2s 1 both;
+      animation-delay: 1s;
+      display: block;
+    }
+
+    .four.rischio2 .needle {
+      animation: fourspeed2 2s 1 both;
+      animation-delay: 1s;
+      display: block;
+    }
+
+    .four.rischio3 .needle {
+      animation: fourspeed3 2s 1 both;
+      animation-delay: 1s;
+      display: block;
+    }
+
+    .four.rischio4 .needle {
+      animation: fourspeed4 2s 1 both;
+      animation-delay: 1s;
+      display: block;
+    }
+
+    .slice-colors {
+      height: 100%;
+    }
+
+    .slice-colors .st {
+      position: absolute;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border: 50px solid transparent;
+    }
+
+
+    .four .slice-colors .st.slice-item:nth-child(2) {
+      border-top: 50px #f1c40f solid;
+      border-right: 50px #f1c40f solid;
+      background-color: #1eaa59;
+    }
+
+    .four .slice-colors .st.slice-item:nth-child(4) {
+      left: 50%;
+      border-bottom: 50px #E84C3D solid;
+      border-right: 50px #E84C3D solid;
+      background-color: #e67e22;
+    }
+
+
+    @-webkit-keyframes fourspeed1 {
+      0% {
+        transform: rotate(0);
+      }
+
+      100% {
+        transform: rotate(16deg);
+      }
+    }
+
+    @-webkit-keyframes fourspeed2 {
+      0% {
+        transform: rotate(0);
+      }
+
+      100% {
+        transform: rotate(65deg);
+      }
+    }
+
+    @-webkit-keyframes fourspeed3 {
+      0% {
+        transform: rotate(0);
+      }
+
+      100% {
+        transform: rotate(85deg);
+      }
+    }
+
+    @-webkit-keyframes fourspeed4 {
+      0% {
+        transform: rotate(0);
+      }
+
+      100% {
+        transform: rotate(120deg);
+      }
+    }
+  </style>
+
+  <div class="topnav">
+    <a class="active" href="#home">Home</a>
+    <a href="/screener">Screener</a>
+    <a href="#about">About</a>
+    <input type="text" placeholder="Search.." onsubmit="">
+  </div>
+
+
+  <div class="container">
+    <div class="STOCK-PRICE-CHART">
+      <canvas id="price-chart" class="round" style="width:100%;height:100%;"></canvas>
+    </div>
+    <div class="SENTIMENT-PIE-CHART">
+      <canvas id="sentiment-pie" class="round"></canvas>
+    </div>
+    <div class="DATA round">
+      <div class="ANALYSIS-SUMMARY">
+        <div class="RATING-GAUGE-LOCATION" style="margin: auto;">
+          <div class="gauge-wrapper">
+            <div class="gauge-2 four rischio3">
+              <div class="slice-colors">
+                <div class="st slice-item"></div>
+                <div class="st slice-item"></div>
+                <div class="st slice-item"></div>
+                <div class="st slice-item"></div>
+              </div>
+              <div class="needle"></div>
+              <div class="gauge-center">
+                <div class="label">GRADE</div>
+                <div class="number">HOLD</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="SUMMARY-1"></div>
+        <div class="SUMMARY-2"></div>
+        <div class="SUMMARY-3"></div>
+        <div class="SUMMARY-4"></div>
+        <div class="SUMMARY-5"></div>
+      </div>
+      <div class="LATEST-ARTICLES round article">
+        <div class="ARTICLE-1">
+          <div class="PUBL-1"></div>
+          <div class="TITLE-1" style="font-size:  0.5vw;">
+            <a id="href-article-1"></a>
+          </div>
+          <div class="SENT-1"></div>
+        </div>
+        <div class="ARTICLE-2">
+          <div class="PUBL-2"></div>
+          <div class="TITLE-2" style="font-size:  0.5vw;">
+            <a id="href-article-2"></a>
+          </div>
+          <div class="SENT-2"></div>
+        </div>
+        <div class="ARTICLE-3">
+          <div class="PUBL-3"></div>
+          <div class="TITLE-3" style="font-size: 0.5vw;">
+            <a id="href-article-3"></a>
+          </div>
+          <div class="SENT-3"></div>
+        </div>
+        <div class="ARTICLE-4">
+          <div class="PUBL-4"></div>
+          <div class="TITLE-4" style="font-size:  0.5vw;">
+            <a id="href-article-4"></a>
+          </div>
+          <div class="SENT-4"></div>
+        </div>
+        <div class="LATEST-ARTICLE-NAME" style="font-size: 25px; padding-top: 3%; color: #7E8185;">LATEST ARTICLE
+          SENTIMENT</div>
+      </div>
+    </div>
+    <div class="SENTIMENT-BAR-CHART">
+      <canvas id="sentiment-bar" class="round"></canvas>
+    </div>
+    <div class="TOPIC-PIE-CHART">
+      <canvas id="topic-pie" class="round"></canvas>
+    </div>
+    <div class="ANALYST-SENTIMENT-BAR-CHART">
+      <canvas id="analyst-bar" class="round"></canvas>
+    </div>
+    <div class="NEWEST-ANALYST-RATINGS round" style="text-align: center;">
+      <div class="RATING-1">
+        <div class="COMP-1"></div>
+        <div class="GRADE-1" style="font-size: 140%;"></div>
+        <div class="DATE-1"></div>
+      </div>
+      <div class="RATING-2">
+        <div class="COMP-2"></div>
+        <div class="GRADE-2" style="font-size: 140%;"></div>
+        <div class="DATE-2"></div>
+      </div>
+      <div class="RATING-3">
+        <div class="COMP-3"></div>
+        <div class="GRADE-3" style="font-size: 140%;"></div>
+        <div class="DATE-3"></div>
+      </div>
+      <div class="RATING-4">
+        <div class="COMP-4"></div>
+        <div class="GRADE-4" style="font-size: 140%;"></div>
+        <div class="DATE-4"></div>
+      </div>
+      <div class="RATING-TITLE" style="padding-top: 5%; font-size: 25px; color: #7E8185;">NEWEST ANALYST RATINGS</div>
+    </div>
+    <div class="STOCK-PRICE-PREDICTION">
+      <canvas id="stock-prediction" class="round"></canvas>
+    </div>
+    <div class="STOCK-SUMMARY round">
+      <div class="TICKER" style="padding-top: 16%; font-size: 200%; text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
+      </div>
+      <div class="PE">
+        <div class="PE-NAME name tooltip">P/E Ratio<span class="tooltiptext-right">The price-to-earnings
+            ratio (P/E
+            ratio) is
+            the ratio for valuing a company that measures its current share price relative to its earnings per
+            share</span></div>
+        <div class="PE-VAL" style="font-size: 140%; text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);"></div>
+      </div>
+      <div class="INSIDER-OWN">
+        <div class="INSIDER-OWN-NAME name tooltip ">Insider Own <span class="tooltiptext-top"> Calculated as the total
+            number of shares owned by insiders</span></div>
+        <div class="INSIDER-OWN-VAL" style="font-size: 140%; text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);"></div>
+      </div>
+      <div class="ANALYST-ESTIMATE">
+        <div class="ANALYST-NAME name tooltip">Target Price <span class="tooltiptext-top">Analysts' mean target
+            price</span></div>
+        <div class="ANALYST-VAL" style="font-size: 140%; text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);"></div>
+      </div>
+      <div class="PRICE">
+        <div class="PRICE-VAL" style="font-size: 200%; padding-top: 8%; text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
+        </div>
+      </div>
+      <div class="RSI">
+        <div class="RSI-NAME name tooltip">RSI (14)<span class="tooltiptext-top">The relative strength index is a
+            momentum indicator that measures the magnitude of recent price changes to
+            evaluate overbought or oversold conditions of a stock. RSI is considered overbought when above 70 and
+            oversold when below 30</span></div>
+        <div class="RSI-VAL">
+          <div class="gauge" id="rsi_gauge">
+            <div class="gauge__body">
+              <div class="gauge__fill"></div>
+              <div class="gauge__cover"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="DIVIDEND">
+        <div class="DIVIDEND-NAME name tooltip">Dividend<span class="tooltiptext-right">A sum of money paid regularly
+            (typically annually) by a company to its shareholders out of its profits (or reserves)</span></div>
+        <div class="DIVIDEND-VAL">
+          <div class="gauge" id="dividend_gauge">
+            <div class="gauge__body">
+              <div class="gauge__fill"></div>
+              <div class="gauge__cover"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="VOLATILITY">
+        <div class="VOLATILITY-NAME name tooltip">Volatility <span class="tooltiptext-top">A statstical measure of the
+            dispersion of returns for a stock. Represents daily high/low trading range</span></div>
+        <div class="VOLATILITY-VAL">
+          <div class="gauge" id="volatility_gauge">
+            <div class="gauge__body">
+              <div class="gauge__fill"></div>
+              <div class="gauge__cover"></div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+      var ticker = "<%= ticker %>";
+
+      very_negative_color = 'rgb(192, 57, 43)';
+      negative_color = 'rgb(231, 76, 60)';
+      neutral_color = 'rgb(243, 156, 18)';
+      positive_color = 'rgb(39, 174, 96)';
+      very_positive_color = 'rgb(22, 160, 133)';
+
+      const Http = new XMLHttpRequest();
+      const url = 'http://localhost:5000/price/' + ticker;
+      Http.open("GET", url);
+      Http.send();
+
+
+      list = []
+      list2 = []
+      list3 = []
+
+      Http.onreadystatechange = (e) => {
+        if (list.length === 0) {
+
+
+          var price = JSON.parse(Http.responseText)
+
+
+          for (var i = 0; i < price.length; i++) {
+            var obj = price[i];
+            price[i]["Date"] = new Date(price[i]["Date"])
+
+          }
+
+          price.sort(function (a, b) {
+            var c = a.Date;
+            var d = b.Date;
+            return c - d;
+          });
+
+          for (var i = 0; i < price.length; i++) {
+            var obj = price[i];
+
+            list.push(obj["Adj Close"]);
+            list2.push(obj["Date"]);
+            list3.push(obj["20MA"])
+
+          }
+          const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+          ];
+
+          for (i = 0; i < list2.length; i++) {
+
+            date = list2[i];
+
+            list2[i] = date.getDate() + " " + monthNames[date.getMonth()];
+          }
+
+
+          var myChart = new Chart(document.getElementById('price-chart'), {
+            type: 'line',
+            data: {
+              labels: list2,
+              datasets: [
+                {
+                  label: 'Price ($)',
+                  backgroundColor: 'rgb(41, 128, 185, 0.4)',
+                  borderColor: 'rgb(41, 128, 185)',
+                  data: list,
+                  lineTension: 0.0,
+                  pointRadius: 0,
+                  pointHoverRadius: 5,
+                  fill: true
+                },
+                {
+                  label: '20-Day Moving Average',
+                  backgroundColor: 'rgb(155, 89, 182)',
+                  borderColor: 'rgb(155, 89, 182)',
+                  data: list3,
+                  lineTension: 0.5,
+                  pointRadius: 0,
+                  pointHoverRadius: 3,
+                  fill: false,
+                  borderWidth: 2
+                }
+              ]
+            },
+            options: {
+              animations: {
+                tension: {
+                  duration: 1000,
+                  easing: 'linear',
+                  from: 1,
+                  to: 0,
+                  //loop: true
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: false
+                }
+              }
+            }
+          });
+
+        }
+
+
+      }
+
+      const Http2 = new XMLHttpRequest();
+      const url2 = 'http://localhost:5000/info/' + ticker;
+      Http2.open("GET", url2);
+      Http2.send();
+      Http2.onreadystatechange = (e) => {
+        var info = JSON.parse(Http2.responseText);
+
+
+
+        function setGaugeValue(gauge, number, value) {
+          if (value < 0 || value > 1) {
+            return;
+          }
+
+          gauge.querySelector(".gauge__fill").style.transform = `rotate(${value / 2
+            }turn)`;
+          gauge.querySelector(".gauge__cover").textContent = `${Math.round(
+            number * 100
+          )}%`;
+        }
+
+        document.getElementsByClassName("INSIDER-OWN-VAL")[0].innerHTML = info[0]["Insider Own"];
+        document.getElementsByClassName("PRICE-VAL")[0].innerHTML = info[0]["Price"] + "$";
+        //document.getElementsByClassName("VOLATILITY-VAL")[0].innerHTML = info[0]["Volatility"] + "%";
+        document.getElementsByClassName("PE-VAL")[0].innerHTML = info[0]["P/E"];
+        document.getElementsByClassName("TICKER")[0].innerHTML = info[0]["Ticker"];
+        //Dividend
+        var gaugeElement = document.getElementById("dividend_gauge");
+        dividend = info[0]["Dividend %"];
+        if (dividend === null) {
+          //document.getElementsByClassName("DIVIDEND-VAL")[0].innerHTML = "0%"
+          setGaugeValue(gaugeElement, 0, 0);;
+          gaugeElement.style.color = very_negative_color;
+        }
+        else {
+          setGaugeValue(gaugeElement, dividend / 100, dividend / 25);
+          if (dividend < 1.0) {
+            gaugeElement.style.color = negative_color;
+          }
+          else if (dividend < 2.0) {
+            gaugeElement.style.color = neutral_color;
+          }
+          else if (dividend < 3.0) {
+            gaugeElement.style.color = positive_color;
+          }
+          else {
+            gaugeElement.style.color = very_positive_color;
+          }
+
+        }
+
+        //Volatility
+        gaugeElement = document.getElementById("volatility_gauge");
+        volatility = info[0]["Volatility"];
+        setGaugeValue(gaugeElement, volatility / 100, volatility / 10);;
+        if (volatility < 3.0) {
+          gaugeElement.style.color = very_positive_color;
+        }
+        else if (volatility < 4.0) {
+          gaugeElement.style.color = positive_color;
+        }
+        else if (volatility < 6.0) {
+          gaugeElement.style.color = neutral_color;
+        }
+        else if (volatility < 8.0) {
+          gaugeElement.style.color = negative_color;
+        }
+        else {
+          gaugeElement.style.color = very_negative_color;
+        }
+
+        //RSI
+        gaugeElement = document.getElementById("rsi_gauge");
+        rsi = info[0]["RSI (14)"];
+        setGaugeValue(gaugeElement, rsi / 100, rsi / 100);;
+        if (rsi < 22.0) {
+          gaugeElement.style.color = very_positive_color;
+        }
+        else if (rsi < 30.0) {
+          gaugeElement.style.color = positive_color;
+        }
+        else if (rsi < 55.0) {
+          gaugeElement.style.color = neutral_color;
+        }
+        else if (rsi < 70.0) {
+          gaugeElement.style.color = negative_color;
+        }
+        else {
+          gaugeElement.style.color = very_negative_color;
+        }
+
+        document.getElementsByClassName("ANALYST-VAL")[0].innerHTML = info[0]["Target Price"] + '$';
+      }
+
+      analyst_dates = []
+      positive = []
+      very_positive = []
+      neutral = []
+      negative = []
+      very_negative = []
+
+
+      const Http3 = new XMLHttpRequest();
+      const url3 = 'http://localhost:5000/analyst/' + ticker;
+      Http3.open("GET", url3);
+      Http3.send();
+      Http3.onreadystatechange = (e) => {
+        if (analyst_dates.length === 0) {
+          var analyst_ratings = JSON.parse(Http3.responseText);
+
+          for (i = 0; i < analyst_ratings.length; i++) {
+            analyst_rating = analyst_ratings[i]
+            analyst_dates.push(analyst_ratings[i]["Month"] + " " + analyst_ratings[i]["Year"])
+            if (analyst_rating["Values"].includes('Buy')) {
+              very_positive.push(analyst_rating["Counts"][analyst_rating["Values"].indexOf("Buy")])
+            }
+            else {
+              very_positive.push(0)
+            }
+            if (analyst_rating["Values"].includes('Outperform')) {
+              positive.push(analyst_rating["Counts"][analyst_rating["Values"].indexOf("Outperform")])
+            }
+            else {
+              positive.push(0)
+            }
+            if (analyst_rating["Values"].includes('Neutral')) {
+              neutral.push(analyst_rating["Counts"][analyst_rating["Values"].indexOf("Neutral")])
+            }
+            else {
+              neutral.push(0)
+            }
+            if (analyst_rating["Values"].includes("Underperform")) {
+              negative.push(analyst_rating["Counts"][analyst_rating["Values"].indexOf("Underperform")])
+            }
+            else {
+              negative.push(0)
+            }
+            if (analyst_rating["Values"].includes("Sell")) {
+              very_negative.push(analyst_rating["Counts"][analyst_rating["Values"].indexOf("Sell")])
+            }
+            else {
+              very_negative.push(0)
+            }
+          }
+          var barChart = new Chart(document.getElementById('sentiment-bar'), {
+            type: 'bar',
+            data: {
+              labels: analyst_dates,
+              datasets: [
+                {
+                  label: 'Very Negative',
+                  data: very_negative,
+                  backgroundColor: 'rgb(192, 57, 43)'
+                },
+                {
+                  label: 'Negative',
+                  data: negative,
+                  backgroundColor: 'rgb(231, 76, 60)'
+                },
+                {
+                  label: 'Neutral',
+                  data: neutral,
+                  backgroundColor: 'rgb(243, 156, 18)'
+                },
+                {
+                  label: 'Positive',
+                  data: positive,
+                  backgroundColor: 'rgb(39, 174, 96)'
+                },
+                {
+                  label: 'Very Positive',
+                  data: very_positive,
+                  backgroundColor: 'rgb(22, 160, 133)'
+                }
+              ]
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Analyst Ratings'
+                },
+              },
+              responsive: true,
+              scales: {
+                x: {
+                  stacked: true,
+                },
+                y: {
+                  stacked: true
+                }
+              }
+            }
+          });
+        }
+
+      }
+
+      firms = []
+      grades = []
+      date_analyst = []
+
+      const Http4 = new XMLHttpRequest();
+      const url4 = 'http://localhost:5000/analyst_latest/' + ticker;
+      Http4.open("GET", url4);
+      Http4.send();
+      Http4.onreadystatechange = (e) => {
+        var analyst_latest = JSON.parse(Http4.responseText);
+
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+
+        const positive_ratings = ["Overweight", "Outperform"];
+        const very_positive_ratings = ["Buy"];
+
+
+        analyst_latest = analyst_latest[0]
+
+        for (i = 1; i < 5; i++) {
+          date = new Date(analyst_latest["Dates"][i - 1]);
+          document.getElementsByClassName("COMP-" + i)[0].innerHTML = analyst_latest["Firms"][i - 1];
+          document.getElementsByClassName("GRADE-" + i)[0].innerHTML = analyst_latest["Grades"][i - 1];
+          document.getElementsByClassName("DATE-" + i)[0].innerHTML = monthNames[date.getMonth()] + " " + date.getDate();
+
+          if (positive_ratings.includes(analyst_latest["Grades"][i - 1])) {
+            document.getElementsByClassName("GRADE-" + i)[0].style.color = positive_color
+          }
+          else if (very_positive_ratings.includes(analyst_latest["Grades"][i - 1])) {
+            document.getElementsByClassName("GRADE-" + i)[0].style.color = very_positive_color
+          }
+          else {
+            document.getElementsByClassName("GRADE-" + i)[0].style.color = neutral_color
+          }
+        }
+      }
+
+      article_sent = []
+      article_sent_dates = []
+
+      const Http5 = new XMLHttpRequest();
+      const url5 = 'http://localhost:5000/article_sent/' + ticker;
+      Http5.open("GET", url5);
+      Http5.send();
+      Http5.onreadystatechange = (e) => {
+        var sents = JSON.parse(Http5.responseText);
+        console.log(sents)
+
+        ma=[]
+
+        if (article_sent.length === 0) {
+
+          for (i = 0; i < sents.length; i++) {
+            sent = sents[i]
+            article_sent.push(sent['Average Comp'])
+            article_sent_dates.push(sent["Day"])
+            ma.push(sent["3MA"])
+
+            console.log(ma)
+
+          }
+
+
+          var barChart = new Chart(document.getElementById('analyst-bar'), {
+            type: 'bar',
+            data: {
+              labels: article_sent_dates,
+              datasets: [
+              {
+                  label: '3-Day Moving Average',
+                  backgroundColor: 'rgb(155, 89, 182)',
+                  borderColor: 'rgb(155, 89, 182)',
+                  data: ma,
+                  lineTension: 0.5,
+                  pointRadius: 0,
+                  pointHoverRadius: 3,
+                  fill: false,
+                  borderWidth: 5,
+                  type: 'line'
+                },
+                {
+                  label: 'Sentiment Score',
+                  data: article_sent,
+                  backgroundColor: 'rgb(41, 128, 185)',
+                  color: 'rgb(41, 128, 185)'
+                }
+              ]
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Article Sentiment'
+                },
+              },
+              responsive: true,
+              scales: {
+                x: {
+                  stacked: true,
+                },
+                y: {
+                  stacked: true
+                }
+              }
+
+            }
+          });
+        }
+      }
+
+
+      const Http6 = new XMLHttpRequest();
+      const url6 = 'http://localhost:5000/articles_latest/' + ticker;
+      Http6.open("GET", url6);
+      Http6.send();
+      Http6.onreadystatechange = (e) => {
+        var articles_latest = JSON.parse(Http6.responseText);
+
+
+
+
+        for (i = 1; i < 5; i++) {
+          document.getElementsByClassName("PUBL-" + i)[0].innerHTML = articles_latest[i - 1]['Publisher'].charAt(0).toUpperCase() + articles_latest[i - 1]['Publisher'].slice(1)
+          //document.getElementsByClassName("TITLE-" + i)[0].innerHTML = articles_latest[i - 1]['Title']
+          document.getElementsByClassName("SENT-" + i)[0].innerHTML = articles_latest[i - 1]['average_comp']
+
+          document.getElementById("href-article-" + i).innerHTML = articles_latest[i - 1]['Title']
+          var a = document.getElementById("href-article-" + i);
+          console.log()
+          a.href = articles_latest[i - 1]['Link'];
+
+
+        }
+
+
+      }
+
+
+      const Http7 = new XMLHttpRequest();
+      const url7 = 'http://localhost:5000/analyst_total/' + ticker;
+      Http7.open("GET", url7);
+      Http7.send();
+      Http7.onreadystatechange = (e) => {
+        var analyst_total = JSON.parse(Http7.responseText);
+
+
+        var pieChart = new Chart(document.getElementById('topic-pie'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Very Positive', 'Positive', 'Neutral', 'Very Negative', 'Negative'],
+            datasets: [
+              {
+                backgroundColor: [
+                  very_positive_color,
+                  positive_color,
+                  neutral_color,
+                  very_negative_color,
+                  negative_color
+                ],
+                borderColor: [
+                  very_positive_color,
+                  positive_color,
+                  neutral_color,
+                  very_negative_color,
+                  negative_color
+                ],
+                data: analyst_total[0]["Total"],
+                lineTension: 0.1,
+                pointRadius: 1,
+                pointHoverRadius: 1
+              }
+            ]
+          },
+          options: {
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Analyst Ratings (12 Months)'
+              },
+            },
+          }
+        });
+      }
+
+
+      const Http8 = new XMLHttpRequest();
+      const url8 = 'http://localhost:5000/text_summary/' + ticker;
+      Http8.open("GET", url8);
+      Http8.send();
+      Http8.onreadystatechange = (e) => {
+        var text_summary = JSON.parse(Http8.responseText);
+        text_summary.sort((a, b) => parseFloat(b.Rating) - parseFloat(a.Rating));
+        colors_list = [very_negative_color, negative_color, neutral_color, positive_color, very_positive_color]
+
+        for (i = 1; i < 6; i++) {
+          text = text_summary[i - 1]
+          document.getElementsByClassName("SUMMARY-" + i )[0].innerHTML = text["Text"]
+          //document.getElementsByClassName("POS-" + i)[0].style.color = colors_list[text["Rating"]]
+        }
+
+
+
+
+      }
+
+      const Http9 = new XMLHttpRequest();
+      const url9 = 'http://localhost:5000/prediction/' + ticker;
+      Http9.open("GET", url9);
+      Http9.send();
+      Http9.onreadystatechange = (e) => {
+        var prediction = JSON.parse(Http9.responseText);
+
+        var myChart = new Chart(document.getElementById('stock-prediction'), {
+          type: 'line',
+          data: {
+            labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            datasets: [
+              {
+                label: 'Price ($)',
+                backgroundColor: 'rgb(41, 128, 185)',
+                borderColor: 'rgb(41, 128, 185)',
+                data: prediction[0]["Prediction"],
+                lineTension: 0.2,
+                pointRadius: 2,
+                pointHoverRadius: 10,
+              },
+              /*
+              {
+                label: 'Upper Bound ($)',
+                backgroundColor: 'rgb(39, 174, 96, 0.2)',
+                borderColor: 'rgb(39, 174, 96)',
+                data: [112.09, 113.01 * 1.001, 113.03 * 1.002, 112.91 * 1.004, 113.07 * 1.008, 113.41 * 1.016, 113.77 * 1.032],
+                lineTension: 0.5,
+                pointRadius: 2,
+                pointHoverRadius: 10,
+                fill: '-1'
+              },
+              {
+                label: 'Lower Bound ($)',
+                backgroundColor: 'rgb(231, 76, 60, 0.2)',
+                borderColor: negative_color,
+                data: [112.09, 113.01 * 0.999, 113.03 * 0.998, 112.91 * 0.996, 113.07 * 0.992, 113.41 * 0.984, 113.77 * 0.968],
+                lineTension: 0.5,
+                pointRadius: 2,
+                pointHoverRadius: 10,
+                fill: '-1'
+              }
+              */
+            ]
+
+          },
+
+          options: {
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Stock Price Prediction (14 Days)'
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false
+              }
+            }
+          }
+        });
+
+
+      }
+
+
+      const Http10 = new XMLHttpRequest();
+      const url10 = 'http://localhost:5000/topics/' + ticker;
+      Http10.open("GET", url10);
+      Http10.send();
+      Http10.onreadystatechange = (e) => {
+        var topics = JSON.parse(Http10.responseText);
+
+        var pieChart = new Chart(document.getElementById('sentiment-pie'), {
+        type: 'doughnut',
+        data: {
+          labels: [topics[0]["Topics"].toString(), topics[1]["Topics"].toString(), topics[2]["Topics"].toString(), topics[3]["Topics"].toString(), topics[4]["Topics"].toString(), topics[5]["Topics"].toString()],
+          datasets: [
+            {
+              label: 'Dataset',
+              backgroundColor: [
+                'rgb(0, 151, 167)',
+                'rgb(0, 121, 107)',
+                'rgb(56, 142, 60)',
+                'rgb(104, 159, 56)',
+                'rgb(155, 89, 182)',
+                'rgb(231, 76, 60)'
+              ],
+              borderColor: [
+                'rgb(0, 151, 167)',
+                'rgb(0, 121, 107)',
+                'rgb(56, 142, 60)',
+                'rgb(104, 159, 56)',
+                'rgb(155, 89, 182)',
+                'rgb(231, 76, 60)'
+              ],
+              data: [20, 25, 20, 40, 25, 20],
+              lineTension: 0.1,
+              pointRadius: 1,
+              pointHoverRadius: 1
+            }
+          ]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Topics (14 Days)'
+            }
+          }
+        }
+      });
+
+      }
+
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>
