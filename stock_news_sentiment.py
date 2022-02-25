@@ -73,7 +73,7 @@ def get_stock_price_from_db(ticker):
     )
 
     db = client["capstone_project"]
-    mycol = db["stocks"]
+    mycol = db["stock_price"]
 
     cursor = mycol.find(
         {},
@@ -359,6 +359,7 @@ def clear_collections():
     collections = [
         "articles",
         "stocks",
+        "stock_price",
         "stocks_info",
         "analyst_ratings",
         "latest_analyst_ratings",
@@ -944,8 +945,8 @@ def clean_topic_text(doc, lemma, exclude, stop):
 
 
 
-new_tickers = ["QCOM"]
-new_names = ["qualcomm"]
+new_tickers = ["XOM"]
+new_names = ["exxon"]
 
 
 
@@ -1099,7 +1100,7 @@ for index, ticker in enumerate(new_tickers):
     insert_dict_into_db(dict_prediction, "price_prediction")
     insert_dict_into_db(dict_recom_last_4, "latest_analyst_ratings")
     insert_dict_into_db(dict_total_in_year, "analyst_total")
-    insert_df_into_db(df_price, "stocks")
+    insert_df_into_db(df_price, "stock_price")
     insert_df_into_db(df_avg_comp, "avg_sentiment")
     insert_df_into_db(latest_article_df, "latest_articles")
     insert_df_into_db(df_info, "stocks_info")
@@ -1118,9 +1119,9 @@ for index, ticker in enumerate(new_tickers):
 
 
 old_tickers = ["AMZN", "TSLA", "BABA", "AAPL", "GOOGL", "MA", "DIS", "INTC", "NFLX", "NVDA", "PINS", 
-            "GME", "MSFT", "JPM", "NKE", "SPOT", "PLTR", "ADBE", "PYPL", "ROKU"]
+            "GME", "MSFT", "JPM", "NKE", "SPOT", "PLTR", "ADBE", "PYPL", "ROKU", "QCOM", "WMT", "PFE"]
 old_names = ["amazon", "tesla", "alibaba", "apple", "google", "mastercard", "disney", "intel", "netflix", "nvidia", "pinterest", 
-            "gamestop", "microsoft", "jpmorgan", "nike", "spotify", "palantir", "adobe", "paypal", "roku"]
+            "gamestop", "microsoft", "jpmorgan", "nike", "spotify", "palantir", "adobe", "paypal", "roku", "qualcomm", "walmart", "pfizer"]
 
 for index, ticker in enumerate(old_tickers):
 
@@ -1239,7 +1240,7 @@ for index, ticker in enumerate(old_tickers):
 
     print("DELETING OLD DATA")
     delete_from_collection(ticker, "stocks_info")
-    delete_from_collection(ticker, "stocks")
+    delete_from_collection(ticker, "stock_price")
     delete_from_collection(ticker, "analyst_ratings")
     delete_from_collection(ticker, "price_prediction")
     delete_from_collection(ticker, "text_summary")
@@ -1263,7 +1264,7 @@ for index, ticker in enumerate(old_tickers):
     insert_dict_into_db(dict_prediction, "price_prediction")
     insert_dict_into_db(dict_recom_last_4, "latest_analyst_ratings")
     insert_dict_into_db(dict_total_in_year, "analyst_total")
-    insert_df_into_db(df_price, "stocks")
+    insert_df_into_db(df_price, "stock_price")
     insert_df_into_db(latest_article_df, "latest_articles")
     insert_df_into_db(df_info, "stocks_info")
 
