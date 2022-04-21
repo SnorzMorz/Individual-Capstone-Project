@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>HTML 5 Boilerplate</title>
+  <title>Dashboard</title>
 </head>
 
 <body>
@@ -90,7 +90,7 @@
     }
 
     .article {
-      font-size: 0.8vw;
+      font-size: 105%;
       text-align: center;
     }
 
@@ -104,16 +104,13 @@
 
     .container {
       font-family: "Roboto", sans-serif;
-      overflow: hidden;
       color: #EEEFEF;
       background-color: #161B23;
       display: grid;
       grid-template-columns: 25% 50% 25%;
       grid-template-rows: 1fr 1fr 1fr;
-      padding-left: 0%;
-      padding-right: 0%;
-      margin-top: 5%;
-      margin-bottom: 5%;
+      padding-left: 2%;
+      padding-right: 2%;
       gap: 1% 0.5%;
       grid-auto-flow: row;
       grid-template-areas:
@@ -139,7 +136,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr;
-      gap: 5px 5px;
       grid-template-areas:
         "ANALYSIS-SUMMARY LATEST-ARTICLES";
       grid-area: DATA;
@@ -361,7 +357,7 @@
     }
 
     .NEWEST-ANALYST-RATINGS {
-      font-size: 20px;
+      font-size: 125%;
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
@@ -915,12 +911,46 @@
         transform: rotate(120deg);
       }
     }
+
+    .sum {
+      font-size: 100%;
+    }
+
+    .LATEST-ARTICLES {
+      font-size: 90%;
+    }
+
+    @media (-webkit-device-pixel-ratio: 1.25) {
+      :root {
+        zoom: 0.75;
+      }
+    }
+
+    @media (-webkit-device-pixel-ratio: 1.5) {
+      :root {
+        zoom: 0.60;
+      }
+    }
+
+    @media (-webkit-device-pixel-ratio: 1.75) {
+      :root {
+        zoom: 0.55;
+      }
+
+      .LATEST-ARTICLES {
+        font-size: 70%;
+      }
+
+      .sum {
+        font-size: 80%;
+      }
+
+    }
   </style>
 
   <div class="topnav">
-    <a class="active" href="#home">Home</a>
+    <a class="active" href="/">Home</a>
     <a href="/screener">Screener</a>
-    <a href="#about">About</a>
     <input type="text" placeholder="Search.." onsubmit="">
   </div>
 
@@ -936,7 +966,7 @@
       <div class="ANALYSIS-SUMMARY">
         <div class="RATING-GAUGE-LOCATION" style="margin: auto;">
           <div class="gauge-wrapper">
-            <div class="gauge-2 four rischio3">
+            <div class="gauge-2 four rischio3" id="gaugeid">
               <div class="slice-colors">
                 <div class="st slice-item"></div>
                 <div class="st slice-item"></div>
@@ -951,42 +981,47 @@
             </div>
           </div>
         </div>
-        <div class="SUMMARY-1"></div>
-        <div class="SUMMARY-2"></div>
-        <div class="SUMMARY-3"></div>
-        <div class="SUMMARY-4"></div>
-        <div class="SUMMARY-5"></div>
+        <div class="SUMMARY-1 sum" style="margin-left: 4%; text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
+        </div>
+        <div class="SUMMARY-2 sum" style="margin-left: 4%;  text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
+        </div>
+        <div class="SUMMARY-3 sum" style="margin-left: 4%; text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
+        </div>
+        <div class="SUMMARY-4 sum" style="margin-left: 4%;  text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
+        </div>
+        <div class="SUMMARY-5 sum" style="margin-left: 4%; text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
+        </div>
       </div>
       <div class="LATEST-ARTICLES round article">
         <div class="ARTICLE-1">
           <div class="PUBL-1"></div>
-          <div class="TITLE-1" style="font-size:  0.5vw;">
+          <div class="TITLE-1">
             <a id="href-article-1"></a>
           </div>
           <div class="SENT-1"></div>
         </div>
         <div class="ARTICLE-2">
           <div class="PUBL-2"></div>
-          <div class="TITLE-2" style="font-size:  0.5vw;">
+          <div class="TITLE-2">
             <a id="href-article-2"></a>
           </div>
           <div class="SENT-2"></div>
         </div>
         <div class="ARTICLE-3">
           <div class="PUBL-3"></div>
-          <div class="TITLE-3" style="font-size: 0.5vw;">
+          <div class="TITLE-3">
             <a id="href-article-3"></a>
           </div>
           <div class="SENT-3"></div>
         </div>
         <div class="ARTICLE-4">
           <div class="PUBL-4"></div>
-          <div class="TITLE-4" style="font-size:  0.5vw;">
+          <div class="TITLE-4">
             <a id="href-article-4"></a>
           </div>
           <div class="SENT-4"></div>
         </div>
-        <div class="LATEST-ARTICLE-NAME" style="font-size: 25px; padding-top: 3%; color: #7E8185;">LATEST ARTICLE
+        <div class="LATEST-ARTICLE-NAME" style="font-size: 125%; padding-top: 3%; color: #7E8185;">LATEST ARTICLE
           SENTIMENT</div>
       </div>
     </div>
@@ -1002,22 +1037,22 @@
     <div class="NEWEST-ANALYST-RATINGS round" style="text-align: center;">
       <div class="RATING-1">
         <div class="COMP-1"></div>
-        <div class="GRADE-1" style="font-size: 140%;"></div>
+        <div class="GRADE-1" style="font-size: 125%;"></div>
         <div class="DATE-1"></div>
       </div>
       <div class="RATING-2">
         <div class="COMP-2"></div>
-        <div class="GRADE-2" style="font-size: 140%;"></div>
+        <div class="GRADE-2" style="font-size: 125%;"></div>
         <div class="DATE-2"></div>
       </div>
       <div class="RATING-3">
         <div class="COMP-3"></div>
-        <div class="GRADE-3" style="font-size: 140%;"></div>
+        <div class="GRADE-3" style="font-size: 125%;"></div>
         <div class="DATE-3"></div>
       </div>
       <div class="RATING-4">
         <div class="COMP-4"></div>
-        <div class="GRADE-4" style="font-size: 140%;"></div>
+        <div class="GRADE-4" style="font-size: 125%;"></div>
         <div class="DATE-4"></div>
       </div>
       <div class="RATING-TITLE" style="padding-top: 5%; font-size: 25px; color: #7E8185;">NEWEST ANALYST RATINGS</div>
@@ -1095,6 +1130,7 @@
 
     <script>
 
+
       var ticker = "<%= ticker %>";
 
       very_negative_color = 'rgb(192, 57, 43)';
@@ -1104,14 +1140,17 @@
       very_positive_color = 'rgb(22, 160, 133)';
 
       const Http = new XMLHttpRequest();
-      const url = 'http://localhost:5000/price/' + ticker;
+      const url = '/price/' + ticker;
       Http.open("GET", url);
       Http.send();
+
+
 
 
       list = []
       list2 = []
       list3 = []
+      list4 = []
 
       Http.onreadystatechange = (e) => {
         if (list.length === 0) {
@@ -1138,10 +1177,11 @@
             list.push(obj["Adj Close"]);
             list2.push(obj["Date"]);
             list3.push(obj["20MA"])
+            list4.push(obj["50MA"])
 
           }
-          const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+          const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
           ];
 
           for (i = 0; i < list2.length; i++) {
@@ -1177,24 +1217,49 @@
                   pointHoverRadius: 3,
                   fill: false,
                   borderWidth: 2
+                },
+                {
+                  label: '50-Day Moving Average',
+                  backgroundColor: 'rgb(241, 196, 15)',
+                  borderColor: 'rgb(241, 196, 15)',
+                  data: list4,
+                  lineTension: 0.5,
+                  pointRadius: 0,
+                  pointHoverRadius: 3,
+                  fill: false,
+                  borderWidth: 2,
+                  hidden: true
                 }
               ]
             },
             options: {
-              animations: {
-                tension: {
-                  duration: 1000,
-                  easing: 'linear',
-                  from: 1,
-                  to: 0,
-                  //loop: true
-                }
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Stock Price'
+                },
+              },
+              elements: {
+                point: {
+                  radius: 1,
+                  hoverRadius: 4,
+                },
+              },
+              tooltips: {
+                mode: 'index',
+                intersect: false,
+                position: 'nearest',
+              },
+              hover: {
+                mode: 'index',
+                intersect: false
               },
               scales: {
                 y: {
                   beginAtZero: false
                 }
-              }
+              },
+
             }
           });
 
@@ -1204,7 +1269,7 @@
       }
 
       const Http2 = new XMLHttpRequest();
-      const url2 = 'http://localhost:5000/info/' + ticker;
+      const url2 = '/info/' + ticker;
       Http2.open("GET", url2);
       Http2.send();
       Http2.onreadystatechange = (e) => {
@@ -1223,11 +1288,28 @@
             number * 100
           )}%`;
         }
+        console.log(info)
 
-        document.getElementsByClassName("INSIDER-OWN-VAL")[0].innerHTML = info[0]["Insider Own"];
+        document.getElementsByClassName("INSIDER-OWN-VAL")[0].innerHTML = info[0]["Insider Own"] + "%";
+        
+        if(info[0]["Insider Own"] < 1.0)
+
         document.getElementsByClassName("PRICE-VAL")[0].innerHTML = info[0]["Price"] + "$";
         //document.getElementsByClassName("VOLATILITY-VAL")[0].innerHTML = info[0]["Volatility"] + "%";
-        document.getElementsByClassName("PE-VAL")[0].innerHTML = info[0]["P/E"];
+        if (info[0]["P/E"] == null) {
+          document.getElementsByClassName("PE-VAL")[0].innerHTML = "NEG"
+          document.getElementsByClassName("PE-VAL")[0].style.color = very_negative_color
+        }
+        else {
+          document.getElementsByClassName("PE-VAL")[0].innerHTML = info[0]["P/E"];
+          value = info[0]["P/E"];
+
+            if (value > 100) document.getElementsByClassName("PE-VAL")[0].style.color = very_negative_color;
+            else if (value > 40) document.getElementsByClassName("PE-VAL")[0].style.color = negative_color;
+            else if (value > 30) document.getElementsByClassName("PE-VAL")[0].style.color = neutral_color;
+            else if (value > 20) document.getElementsByClassName("PE-VAL")[0].style.color = positive_color;
+            else return document.getElementsByClassName("PE-VAL")[0].style.color = very_positive_color;
+        }
         document.getElementsByClassName("TICKER")[0].innerHTML = info[0]["Ticker"];
         //Dividend
         var gaugeElement = document.getElementById("dividend_gauge");
@@ -1293,8 +1375,23 @@
         else {
           gaugeElement.style.color = very_negative_color;
         }
-
-        document.getElementsByClassName("ANALYST-VAL")[0].innerHTML = info[0]["Target Price"] + '$';
+        var target_price = document.getElementsByClassName("ANALYST-VAL")[0]
+        target_price.innerHTML = info[0]["Target Price"] + '$';
+        if (info[0]["Target Price"] / info[0]["Price"] > 1.5) {
+          target_price.style.color = very_positive_color
+        }
+        else if (info[0]["Target Price"] / info[0]["Price"] > 1.25) {
+          target_price.style.color = positive_color
+        }
+        else if (info[0]["Target Price"] / info[0]["Price"] > 1.04) {
+          target_price.style.color = neutral_color
+        }
+        else if (info[0]["Target Price"] / info[0]["Price"] > 0.9) {
+          target_price.style.color = negative_color
+        }
+        else {
+          target_price.style.color = very_negative_color
+        }
       }
 
       analyst_dates = []
@@ -1393,7 +1490,8 @@
                   stacked: true,
                 },
                 y: {
-                  stacked: true
+                  stacked: true,
+                  suggestedMax: 4
                 }
               }
             }
@@ -1417,8 +1515,10 @@
           "July", "August", "September", "October", "November", "December"
         ];
 
-        const positive_ratings = ["Overweight", "Outperform"];
+        const positive_ratings = ["Overweight", "Outperform", "Market Outperform"];
         const very_positive_ratings = ["Buy"];
+        const very_negative_ratings = ["Sell"];
+        const negative_ratings = ["Underweight"];
 
 
         analyst_latest = analyst_latest[0]
@@ -1435,6 +1535,12 @@
           else if (very_positive_ratings.includes(analyst_latest["Grades"][i - 1])) {
             document.getElementsByClassName("GRADE-" + i)[0].style.color = very_positive_color
           }
+          else if (very_negative_ratings.includes(analyst_latest["Grades"][i - 1])) {
+            document.getElementsByClassName("GRADE-" + i)[0].style.color = very_negative_color
+          }
+          else if (negative_ratings.includes(analyst_latest["Grades"][i - 1])) {
+            document.getElementsByClassName("GRADE-" + i)[0].style.color = negative_color
+          }
           else {
             document.getElementsByClassName("GRADE-" + i)[0].style.color = neutral_color
           }
@@ -1450,21 +1556,39 @@
       Http5.send();
       Http5.onreadystatechange = (e) => {
         var sents = JSON.parse(Http5.responseText);
-        console.log(sents)
 
-        ma=[]
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+
+
+        ma3 = []
+        ma7 = []
 
         if (article_sent.length === 0) {
+
+          sents = sents.sort(function (x, y) {
+            var n = x["Month"] - y["Month"];
+            if (n !== 0) {
+              return n;
+            }
+
+            return x["Day"] - y["Day"];
+          });
+
+          console.log(sents)
 
           for (i = 0; i < sents.length; i++) {
             sent = sents[i]
             article_sent.push(sent['Average Comp'])
-            article_sent_dates.push(sent["Day"])
-            ma.push(sent["3MA"])
-
-            console.log(ma)
+            article_sent_dates.push(sent["Day"] + " " + monthNames[sent["Month"] - 1])
+            ma3.push(sent["3MA"])
+            ma7.push(sent["7MA"])
 
           }
+
+          console.log(article_sent_dates)
 
 
           var barChart = new Chart(document.getElementById('analyst-bar'), {
@@ -1472,23 +1596,39 @@
             data: {
               labels: article_sent_dates,
               datasets: [
-              {
+                {
+                  label: '7-Day Moving Average',
+                  backgroundColor: 'rgb(241, 196, 15)',
+                  borderColor: 'rgb(241, 196, 15)',
+                  data: ma7,
+                  lineTension: 0.5,
+                  pointRadius: 0,
+                  pointHoverRadius: 5,
+                  fill: false,
+                  borderWidth: 2,
+                  type: 'line',
+                  order: 1
+                },
+                {
                   label: '3-Day Moving Average',
                   backgroundColor: 'rgb(155, 89, 182)',
                   borderColor: 'rgb(155, 89, 182)',
-                  data: ma,
+                  data: ma3,
                   lineTension: 0.5,
                   pointRadius: 0,
-                  pointHoverRadius: 3,
+                  pointHoverRadius: 5,
                   fill: false,
-                  borderWidth: 5,
-                  type: 'line'
+                  borderWidth: 2,
+                  type: 'line',
+                  order: 2,
+                  hidden: true
                 },
                 {
                   label: 'Sentiment Score',
                   data: article_sent,
                   backgroundColor: 'rgb(41, 128, 185)',
-                  color: 'rgb(41, 128, 185)'
+                  color: 'rgb(41, 128, 185)',
+                  order: 3
                 }
               ]
             },
@@ -1501,15 +1641,6 @@
                 },
               },
               responsive: true,
-              scales: {
-                x: {
-                  stacked: true,
-                },
-                y: {
-                  stacked: true
-                }
-              }
-
             }
           });
         }
@@ -1531,7 +1662,21 @@
           //document.getElementsByClassName("TITLE-" + i)[0].innerHTML = articles_latest[i - 1]['Title']
           document.getElementsByClassName("SENT-" + i)[0].innerHTML = articles_latest[i - 1]['average_comp']
 
-          document.getElementById("href-article-" + i).innerHTML = articles_latest[i - 1]['Title']
+          if (articles_latest[i - 1]['average_comp'] > 0.2) {
+            document.getElementsByClassName("SENT-" + i)[0].style.color = positive_color;
+          }
+          else if (articles_latest[i - 1]['average_comp'] > 0) {
+            document.getElementsByClassName("SENT-" + i)[0].style.color = neutral_color;
+          }
+          else {
+            document.getElementsByClassName("SENT-" + i)[0].style.color = negative_color;
+          }
+          var title = articles_latest[i - 1]['Title'];
+          if (title.length > 80) {
+            title = title.slice(0, 75) + "..."
+          }
+          document.getElementById("href-article-" + i).innerHTML = title;
+
           var a = document.getElementById("href-article-" + i);
           console.log()
           a.href = articles_latest[i - 1]['Link'];
@@ -1602,8 +1747,8 @@
 
         for (i = 1; i < 6; i++) {
           text = text_summary[i - 1]
-          document.getElementsByClassName("SUMMARY-" + i )[0].innerHTML = text["Text"]
-          //document.getElementsByClassName("POS-" + i)[0].style.color = colors_list[text["Rating"]]
+          document.getElementsByClassName("SUMMARY-" + i)[0].innerHTML = text["Text"]
+          document.getElementsByClassName("SUMMARY-" + i)[0].style.color = colors_list[text["Rating"]]
         }
 
 
@@ -1618,10 +1763,41 @@
       Http9.onreadystatechange = (e) => {
         var prediction = JSON.parse(Http9.responseText);
 
+        var options = { day: 'numeric', month: 'short', };
+
+        n = 1.003
+        n_lower = 0.997
+        upper = []
+        lower = []
+        dates = []
+        var today = new Date()
+        var tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+
+        for (i = 0; i < prediction[0]["Prediction"].length; i++) {
+          if (tomorrow.getDay() == 6 || tomorrow.getDay() == 0) {
+            upper.push(null)
+            lower.push(null)
+            dates.push(tomorrow.toLocaleDateString("en-UK", options))
+            prediction[0]["Prediction"][i] = null
+
+
+          }
+          else {
+            upper.push(prediction[0]["Prediction"][i] * n)
+            lower.push(prediction[0]["Prediction"][i] * n_lower)
+            dates.push(tomorrow.toLocaleDateString("en-UK", options))
+
+          }
+          tomorrow.setDate(tomorrow.getDate() + 1)
+          n = n * 1.003
+          n_lower = n_lower * 0.997
+        }
+
         var myChart = new Chart(document.getElementById('stock-prediction'), {
           type: 'line',
           data: {
-            labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            labels: dates,
             datasets: [
               {
                 label: 'Price ($)',
@@ -1631,29 +1807,30 @@
                 lineTension: 0.2,
                 pointRadius: 2,
                 pointHoverRadius: 10,
+                spanGaps: true,
               },
-              /*
               {
                 label: 'Upper Bound ($)',
                 backgroundColor: 'rgb(39, 174, 96, 0.2)',
                 borderColor: 'rgb(39, 174, 96)',
-                data: [112.09, 113.01 * 1.001, 113.03 * 1.002, 112.91 * 1.004, 113.07 * 1.008, 113.41 * 1.016, 113.77 * 1.032],
+                data: upper,
                 lineTension: 0.5,
                 pointRadius: 2,
                 pointHoverRadius: 10,
-                fill: '-1'
+                fill: '-1',
+                spanGaps: true,
               },
               {
                 label: 'Lower Bound ($)',
                 backgroundColor: 'rgb(231, 76, 60, 0.2)',
                 borderColor: negative_color,
-                data: [112.09, 113.01 * 0.999, 113.03 * 0.998, 112.91 * 0.996, 113.07 * 0.992, 113.41 * 0.984, 113.77 * 0.968],
+                data: lower,
                 lineTension: 0.5,
                 pointRadius: 2,
                 pointHoverRadius: 10,
-                fill: '-1'
+                fill: '-1',
+                spanGaps: true,
               }
-              */
             ]
 
           },
@@ -1669,6 +1846,13 @@
             scales: {
               y: {
                 beginAtZero: false
+              },
+              x: {
+                ticks: {
+                  autoSkip: true,
+                  maxRotation: 50,
+                  minRotation: 45
+                }
               }
             }
           }
@@ -1684,47 +1868,82 @@
       Http10.send();
       Http10.onreadystatechange = (e) => {
         var topics = JSON.parse(Http10.responseText);
+        labels = []
+        perc = []
+
+        for (let step = 0; step < topics.length; step++) {
+          labels.push(topics[step]["Topics"].toString());
+          perc.push(topics[step]["Percentage"])
+        }
+
 
         var pieChart = new Chart(document.getElementById('sentiment-pie'), {
-        type: 'doughnut',
-        data: {
-          labels: [topics[0]["Topics"].toString(), topics[1]["Topics"].toString(), topics[2]["Topics"].toString(), topics[3]["Topics"].toString(), topics[4]["Topics"].toString(), topics[5]["Topics"].toString()],
-          datasets: [
-            {
-              label: 'Dataset',
-              backgroundColor: [
-                'rgb(0, 151, 167)',
-                'rgb(0, 121, 107)',
-                'rgb(56, 142, 60)',
-                'rgb(104, 159, 56)',
-                'rgb(155, 89, 182)',
-                'rgb(231, 76, 60)'
-              ],
-              borderColor: [
-                'rgb(0, 151, 167)',
-                'rgb(0, 121, 107)',
-                'rgb(56, 142, 60)',
-                'rgb(104, 159, 56)',
-                'rgb(155, 89, 182)',
-                'rgb(231, 76, 60)'
-              ],
-              data: [20, 25, 20, 40, 25, 20],
-              lineTension: 0.1,
-              pointRadius: 1,
-              pointHoverRadius: 1
-            }
-          ]
-        },
-        options: {
-          maintainAspectRatio: false,
-          plugins: {
-            title: {
-              display: true,
-              text: 'Topics (14 Days)'
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Dataset',
+                backgroundColor: [
+                  'rgb(0, 151, 167)',
+                  'rgb(0, 121, 107)',
+                  'rgb(56, 142, 60)',
+                  'rgb(104, 159, 56)',
+                  'rgb(155, 89, 182)',
+                  'rgb(231, 76, 60)'
+                ],
+                borderColor: [
+                  'rgb(0, 151, 167)',
+                  'rgb(0, 121, 107)',
+                  'rgb(56, 142, 60)',
+                  'rgb(104, 159, 56)',
+                  'rgb(155, 89, 182)',
+                  'rgb(231, 76, 60)'
+                ],
+                data: perc,
+                lineTension: 0.1,
+                pointRadius: 1,
+                pointHoverRadius: 1
+              }
+            ]
+          },
+          options: {
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Topics (14 Days)'
+              }
             }
           }
+        });
+
+      }
+
+      const Http11 = new XMLHttpRequest();
+      const url11 = 'http://localhost:5000/rating/' + ticker;
+      Http11.open("GET", url11);
+      Http11.send();
+      Http11.onreadystatechange = (e) => {
+        var rating = JSON.parse(Http11.responseText);
+        rating = rating[0]["Rating"]
+        console.log(rating)
+        document.getElementById("gaugeid").classList.remove('rischio3');
+
+        if (rating > 3.0) {
+          document.getElementById("gaugeid").classList.add('rischio1');
+          document.getElementsByClassName("number")[0].innerHTML = "BUY"
         }
-      });
+        if (rating > 2.5) {
+          document.getElementById("gaugeid").classList.add('rischio2');
+        }
+        if (rating > 1.9) {
+          document.getElementById("gaugeid").classList.add('rischio3');
+        }
+        else {
+          document.getElementById("gaugeid").classList.add('rischio4');
+          document.getElementsByClassName("number")[0].innerHTML = "SELL"
+        }
 
       }
 

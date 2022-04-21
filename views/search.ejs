@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Search</title>
 </head>
 
 <body>
@@ -34,170 +34,328 @@
             vertical-align: middle;
         }
 
-        input,
-        button {
-            color: #fff;
-            font-family: Nunito;
-            padding: 0;
+        .fade-in {
+            animation: fadeIn ease 3s;
+            -webkit-animation: fadeIn ease 3s;
+            -moz-animation: fadeIn ease 3s;
+            -o-animation: fadeIn ease 3s;
+            -ms-animation: fadeIn ease 3s;
+            color: #EEEFEF;
+        }
+
+        .text {
             margin: 0;
-            border: 0;
-            background-color: transparent;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 50%;
+            padding: 70px 0;
+            text-align: center;
         }
-
-        #cover {
+        .search {
+            margin: 0;
             position: absolute;
             top: 50%;
-            left: 0;
-            right: 0;
-            width: 550px;
-            padding: 35px;
-            margin: -83px auto 0 auto;
-            background-color: rgb(41, 128, 185);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgb(41, 128, 185), 0 0 0 20px #ffffffeb;
-            transform: scale(0.6);
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 50%;
+            padding: 70px 0;
+            text-align: center;
         }
 
-        form {
-            height: 96px;
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
-        input[type="text"] {
+        @-moz-keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-o-keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @-ms-keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 16px Arial;
+        }
+
+        .autocomplete {
+            /*the container must be positioned relative:*/
+            position: relative;
+            display: inline-block;
+        }
+
+        input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input[type=text] {
+            background-color: #f1f1f1;
             width: 100%;
-            height: 96px;
-            font-size: 60px;
-            line-height: 1;
         }
 
-        input[type="text"]::placeholder {
+        input[type=submit] {
+            background-color: DodgerBlue;
             color: #fff;
         }
 
-        #s-cover {
-            width: 1px;
-            padding-left: 35px;
+        .random_button {
+            background-color: DodgerBlue;
+            color: #fff;
+            border: 1px solid transparent;
+            padding: 10px;
+            font-size: 16px;
         }
 
-        button {
-            position: relative;
-            display: block;
-            width: 84px;
-            height: 96px;
-            cursor: pointer;
+        
+        .random_button{
+            margin: 0;
+            position: absolute;
+            top: 68%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            text-align: center;
         }
 
-        #s-circle {
-            position: relative;
-            top: -8px;
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
             left: 0;
-            width: 43px;
-            height: 43px;
-            margin-top: 0;
-            border-width: 15px;
-            border: 15px solid #fff;
-            background-color: transparent;
-            border-radius: 50%;
-            transition: 0.5s ease all;
-        }
-
-        button span {
-            position: absolute;
-            top: 68px;
-            left: 43px;
-            display: block;
-            width: 45px;
-            height: 15px;
-            background-color: transparent;
-            border-radius: 10px;
-            transform: rotateZ(52deg);
-            transition: 0.5s ease all;
-        }
-
-        button span:before,
-        button span:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
             right: 0;
-            width: 45px;
-            height: 15px;
+        }
+
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
             background-color: #fff;
-            border-radius: 10px;
-            transform: rotateZ(0);
-            transition: 0.5s ease all;
+            border-bottom: 1px solid #d4d4d4;
         }
 
-        #s-cover:hover #s-circle {
-            top: -1px;
-            width: 67px;
-            height: 15px;
-            border-width: 0;
-            background-color: #fff;
-            border-radius: 20px;
+        .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9;
         }
 
-        #s-cover:hover span {
-            top: 50%;
-            left: 56px;
-            width: 25px;
-            margin-top: -9px;
-            transform: rotateZ(0);
+        #error {
+            margin: 0;
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 50%;
+            color: #EEEFEF ;
+            padding: 70px 0;
+            text-align: center;
+
         }
 
-        #s-cover:hover button span:before {
-            bottom: 11px;
-            transform: rotateZ(52deg);
-        }
-
-        #s-cover:hover button span:after {
-            bottom: -11px;
-            transform: rotateZ(-52deg);
-        }
-
-        #s-cover:hover button span:before,
-        #s-cover:hover button span:after {
-            right: -6px;
-            width: 40px;
-            background-color: #fff;
-        }
-
-        #ytd-url {
-            display: block;
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            padding: 10px 14px;
-            margin: 20px;
-            color: #fff;
-            font-family: Nunito;
-            font-size: 14px;
-            text-decoration: none;
-            background-color: #ff7575;
-            border-radius: 4px;
-            box-shadow: 0 10px 20px -5px rgba(255, 117, 117, 0.86);
-            z-index: 125;
+        .autocomplete-active {
+            /*when navigating through the items using the arrow keys:*/
+            background-color: DodgerBlue !important;
+            color: #ffffff;
         }
     </style>
-    <div id="cover">
-        <form onsubmit="search()">
-            <div class="tb">
-                <div class="td"><input type="text" placeholder="Search" id="searchText" required ></div>
-                <div class="td" id="s-cover">
-                    <button type="submit">
-                        <div id="s-circle"></div>
-                        <span></span>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+    <h1 class="fade-in text">What Stock are you Interested in?</h1>
+    <h3 id="error" class="fade-in"></h3>
+    <form autocomplete="off" class="search" onsubmit="search()">
+        <div class="autocomplete" style="width:600px;">
+            <input id="myInput" type="text" name="stock" placeholder="Ticker">
+        </div>
+        <input type="submit">
+    </form>
+    <button type="button" class="random_button" onclick="randomStock()">I'm Feeling Lucky</button>
 </body>
 <script>
-function search(){
-    var search = document.getElementById("searchText").value;
-    console.log(search)
-    window.open("http://localhost:5000/stock/" + search.toUpperCase());
-}
+
+    var stocks = ["AMZN", "TSLA", "BABA", "AAPL", "GOOGL", "MA", "DIS", "INTC", "NFLX", "NVDA", "PINS", "GME", "MSFT", "JPM", "NKE", "SPOT", "PLTR", "ADBE", "PYPL", "ROKU", "QCOM", "WMT",
+        "PFE", "XOM", "KO", "VZ", "ORCL", "JNJ", "BAC", "TGT", "MCD", "EA", "PEP",
+        "EA", "COF", "TWTR", "CAT", "ABT", "CRM", "WFC", "NEE", "RTX", "TMUS", "HON"]
+
+
+    function search() {
+        var search = document.getElementById("myInput").value;
+        console.log(search)
+        if(stocks.includes(search.toUpperCase())){
+            window.open("http://localhost:5000/stock/" + search.toUpperCase());
+        }
+    }
+
+    function randomStock(){
+        var stock = stocks[Math.floor(Math.random()*stocks.length)];
+        window.open("http://localhost:5000/stock/" + stock);
+    }
+
+
+
+    function autocomplete(inp, arr) {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const stock = urlParams.get('stock')
+            if(stock) {
+                if(!(stocks.includes(stock.toUpperCase()))){
+                x=document.getElementById("error");
+                x.innerText="Stock " + stock.toUpperCase() + " is not available!"
+                console.log("No such stock")
+            }
+
+            }
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    autocomplete(document.getElementById("myInput"), stocks);
 
 </script>
 
