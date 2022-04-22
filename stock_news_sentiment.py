@@ -1,3 +1,6 @@
+from cmath import nan
+from pydoc_data.topics import topics
+from typing import Collection
 from urllib.request import urlopen, Request
 import re
 import string
@@ -31,13 +34,12 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 import gensim
 from gensim import corpora
+from collections import Counter
 
 pd.options.mode.chained_assignment = None
 
-def insert_df_into_db(df, collection_name):
-    client = MongoClient(
-        "mongodb+srv://andrisvaivods11:andyPandy2000!@cluster0.4ozrv.mongodb.net/test"
-    )
+
+def insert_df_into_db(df, collection_name, client):
 
     db = client["capstone_project"]
     collection = db[collection_name]
@@ -46,15 +48,14 @@ def insert_df_into_db(df, collection_name):
 
     collection.insert_many(data_dict)
 
-def insert_dict_into_db(dict, collection_name):
-    client = MongoClient(
-        "mongodb+srv://andrisvaivods11:andyPandy2000!@cluster0.4ozrv.mongodb.net/test"
-    )
+
+def insert_dict_into_db(dict, collection_name, client):
 
     db = client["capstone_project"]
     collection = db[collection_name]
 
     collection.insert_one(dict)
+
 
 def get_stock_price(ticker, days):
     start = dt.datetime.today() - timedelta(days=days)
@@ -66,6 +67,7 @@ def get_stock_price(ticker, days):
     df_price["Date"] = df_price.index
     df_price.index = range(1, len(df_price) + 1)
     return df_price
+
 
 def get_stock_price_from_db(ticker):
     client = MongoClient(
@@ -83,6 +85,7 @@ def get_stock_price_from_db(ticker):
 
     return df
 
+
 def get_articles_from_db(ticker):
     client = MongoClient(
         "mongodb+srv://andrisvaivods11:andyPandy2000!@cluster0.4ozrv.mongodb.net/test",
@@ -97,46 +100,53 @@ def get_articles_from_db(ticker):
 
     return df
 
-def count_occurrences(word, text):
-    return text.lower().split().count(word)
 
+# TESTED AND OPTIMIZED
+def count_occurrences(word, text):
+    return text.lower().split().count(word.lower())
+
+
+# TESTED
+# TODO Send already cleaned data, instead of cleaning in function
 def is_article_important(ticker, name, article, title):
 
-    article_clean = re.sub(r'\W+', ' ', article)
-    title_clean = re.sub(r'\W+', ' ', title)
+    article_clean = re.sub(r"\W+", " ", article)
+    title_clean = re.sub(r"\W+", " ", title)
 
-    #print("Title:" + title_clean)
-    #print("Article:" + article_clean)
-    #print("Ticker:" + ticker)
-    #print("Name:" + name)
+    print(title_clean)
 
-    #title_num = count_occurrences(ticker, title_clean) + count_occurrences(name, title_clean)
-    #print("Occurences in title: " + str(title_num))
-
-
-    #title_num = count_occurrences(ticker, article_clean) + count_occurrences(name, article_clean)
-    #print("Occurences in Text: " + str(title_num))
-
-
-
-    if(count_occurrences(ticker, title_clean) >=1 or count_occurrences(name, title_clean) >= 1):
+    if (
+        count_occurrences(ticker, title_clean) >= 1
+        or count_occurrences(name, title_clean) >= 1
+    ):
         return True
-    if(count_occurrences(ticker, article_clean) + count_occurrences(name, article_clean) >=5):
+    if (
+        count_occurrences(ticker, article_clean)
+        + count_occurrences(name, article_clean)
+        >= 4
+    ):
         return True
 
     return False
 
+
+# TESTED
 def get_all_articles(ticker):
-    finviz_url = "https://finviz.com/quote.ashx?t="
-    url = finviz_url + ticker
+    try:
+        finviz_url = "https://finviz.com/quote.ashx?t="
+        url = finviz_url + ticker
 
-    req = Request(url=url, headers={"user-agent": "my-app"})
-    response = urlopen(req)
+        req = Request(url=url, headers={"user-agent": "my-app"})
+        response = urlopen(req)
 
-    html = bs(response, features="html.parser")
-    news_table = html.find(id="news-table")
+        html = bs(response, features="html.parser")
+        news_table = html.find(id="news-table")
 
-    return news_table
+        return news_table
+    except Exception:
+        print(Exception)
+        return
+
 
 def parse_articles(ticker, name, tr):
     parsed_data = []
@@ -158,31 +168,25 @@ def parse_articles(ticker, name, tr):
 
         date_time = dt.datetime.strptime(date_time, "%b-%d-%y %H:%M%p ")
 
-        if(date_time.date() < dt.datetime.today().date()):
+        if date_time.date() < dt.datetime.today().date():
 
-            article_link = row.find("a", {"class": "tab-link-news"}).attrs[
-                "href"
-            ]  # Link for article
-            # Get publisher, strip whitespace, lowercase
+            article_link = row.find("a", {"class": "tab-link-news"}).attrs["href"]
             publisher = row.span.text.strip().lower()
 
             article_text = get_article_text(article_link, publisher)
 
-            if(date_time.date() == dt.datetime.today().date()): 
+            if date_time.date() == dt.datetime.today().date():
                 break
 
-
-            if article_text != "" and is_article_important(ticker.lower(), name, article_text, title):
+            if article_text != "" and is_article_important(
+                ticker.lower(), name, article_text, title
+            ):
                 parsed_data.append(
                     [ticker, date_time, publisher, title, article_link, article_text]
                 )
 
-            #i=i+1
-
-            #if(i == 10):
-                #break
-
     return parsed_data
+
 
 def get_article_text(href, publisher):
     yahoo_publishers = [
@@ -200,7 +204,7 @@ def get_article_text(href, publisher):
         "investing.com",
         "simply wall st.",
         "business wire",
-        "investorplace"
+        "investorplace",
     ]
     try:
         req = Request(url=href, headers={"user-agent": "my-app"})
@@ -210,7 +214,7 @@ def get_article_text(href, publisher):
 
         print(publisher)
         if publisher == "motley fool":
-            article_text = html.find(class_="usmf-new article-body").text
+            article_text = html.find(class_="tailwind-article-body").text
             # print("Worked")
         elif publisher in yahoo_publishers:
             article_text = html.find(class_="caas-body").text
@@ -256,39 +260,6 @@ def get_article_text(href, publisher):
     article_text = " ".join(article_text.split())
 
     return article_text
-
-def fetch_from_db(db_name, collection_name, query):
-
-    client = MongoClient(
-        "mongodb+srv://andrisvaivods11:andyPandy2000!@cluster0.4ozrv.mongodb.net/test"
-    )
-
-    mydb = client[db_name]
-    mycol = mydb[collection_name]
-
-    cursor = mycol.find({}, {query})
-    df = pd.DataFrame(list(cursor))
-    return df
-
-# TAKE ARTICLES AS INPUT, GET ID OF OLD ARTICLES AND DELETE THOSE
-def delete_old_articles(ticker, days):
-    df = get_articles_from_db(ticker)
-
-    df = df.loc[: dt.datetime.now() - dt.timedelta(days=days)]
-
-    myclient = MongoClient(
-        "mongodb+srv://andrisvaivods11:andyPandy2000!@cluster0.4ozrv.mongodb.net/test"
-    )
-    mydb = myclient["capstone_project"]
-    mycol = mydb["articles"]
-
-    for index, row in df.iterrows():
-        mycol.delete_one({"_id": row["_id"]})
-
-    # for index, row in df.iterrows():
-    # print(row)
-    # if(row["date"] < dt.datetime.now() - dt.timedelta(days = days)):
-    # mycol.delete_one({"_id": row["_id"]})
 
 
 def get_title_sentiment(articles):
@@ -369,24 +340,27 @@ def clear_collections():
         "avg_sentiment",
         "article_info",
         "price_prediction",
-        "latest_articles"
+        "latest_articles",
     ]
     mydb = client["capstone_project"]
     for collection in collections:
         mycol = mydb[collection]
         x = mycol.delete_many({})
 
-def delete_from_collection(ticker, collection):
-    client = MongoClient(
-        "mongodb+srv://andrisvaivods11:andyPandy2000!@cluster0.4ozrv.mongodb.net/test"
-    )
+
+def delete_from_collection(ticker, collection, client):
+
     mydb = client["capstone_project"]
     mycol = mydb[collection]
-    x = mycol.delete_many({"Ticker":ticker})
+    x = mycol.delete_many({"Ticker": ticker})
 
 
+def clear_collection(collection, client):
+    mydb = client["capstone_project"]
+    mycol = mydb[collection]
+    x = mycol.delete_many({})
 
-# TAKE ARTICLES AS INPUT, TAKE AMOUNT OF DAYS FOR AVG, COMPARE IF DAY IS INCLUDED, IF NOT BREAK, IF IS ADD TO AVG, INCREASE COUNT BY ONE
+
 def get_avg_sentiment(articles, days):
     for index, row in articles.iterrows():
         return 0
@@ -468,40 +442,45 @@ def parse_analyst_ratings(df, ticker):
 
 
 def summerize_article_sentiment_by_day(df, ticker):
-    start_date =min(df['Date'])
-    end_date = max(df['Date'])
+    start_date = min(df["Date"])
+    end_date = max(df["Date"])
 
-    #start_date = dt.datetime.now() - timedelta(days=4)
-    #end_date = start_date + timedelta(days=1)
-
-
-    df_avg_comp = pd.DataFrame() 
+    df_avg_comp = pd.DataFrame()
 
     current_date = start_date
 
     while current_date <= end_date:
 
-        mask = (pd.to_datetime(df["Date"]) >= current_date) & (pd.to_datetime(df["Date"]) <= (current_date + dt.timedelta(days=1)))
-
-        #mask = (df["Date"] >= current_date) & (df["Date"] <= current_date + dt.timedelta(hours=24-current_date.hours))
+        mask = (pd.to_datetime(df["Date"]) >= current_date) & (
+            pd.to_datetime(df["Date"]) <= (current_date + dt.timedelta(days=1))
+        )
 
         period = df.loc[mask]
 
         dict = {
             "Average Comp": round(period["average_comp"].mean(), 4),
+            "Year": current_date.year,
             "Day": current_date.day,
             "Month": current_date.month,
             "Ticker": ticker,
         }
-        print(dict)
 
         df_avg_comp = df_avg_comp.append(dict, ignore_index=True)
 
-        print(df_avg_comp)
+        current_date = current_date + dt.timedelta(days=1)
 
-        current_date = current_date + dt.timedelta(days = 1)
-
-    df_avg_comp["3MA"] = df_avg_comp["Average Comp"].fillna(method="backfill").rolling(window=3, min_periods=0).mean()
+    df_avg_comp["3MA"] = (
+        df_avg_comp["Average Comp"]
+        .fillna(method="backfill")
+        .rolling(window=3, min_periods=0)
+        .mean()
+    )
+    df_avg_comp["7MA"] = (
+        df_avg_comp["Average Comp"]
+        .fillna(method="backfill")
+        .rolling(window=7, min_periods=0)
+        .mean()
+    )
 
     return df_avg_comp
 
@@ -526,35 +505,34 @@ def generate_text_summary_from_info(df, ticker):
     dicts = list()
     rating = 0
 
-
     # DIVIDEND
     if math.isnan(df["Dividend %"]):
         dicts.append(
-            {"Ticker": ticker, "Text": "The Stock does not pay a Dividend", "Rating": 0}
+            {"Ticker": ticker, "Text": "The stock does not pay a dividend", "Rating": 0}
         )
     elif df["Dividend %"].values < 1.5:
         dicts.append(
-            {"Ticker": ticker, "Text": "The Stock pays a small Dividend", "Rating": 2}
+            {"Ticker": ticker, "Text": "The stock pays a small dividend", "Rating": 2}
         )
         rating = rating + 2
     else:
         dicts.append(
-            {"Ticker": ticker, "Text": "The Stock pays a good  Dividend", "Rating": 3}
+            {"Ticker": ticker, "Text": "The stock pays a good  dividend", "Rating": 3}
         )
         rating = rating + 3
 
     # RSI
 
-    if (df["RSI (14)"].values < 30.0):
+    if df["RSI (14)"].values < 30.0:
         dicts.append(
             {
                 "Ticker": ticker,
-                "Text": "The RSI is showing the stock is oversold",
+                "Text": "The RSI Is Showing The Stock Is Oversold",
                 "Rating": 4,
             }
         )
         rating = rating + 4
-    elif(df["RSI (14)"].values < 70.0):
+    elif df["RSI (14)"].values < 70.0:
         dicts.append(
             {
                 "Ticker": ticker,
@@ -574,7 +552,7 @@ def generate_text_summary_from_info(df, ticker):
 
     # TARGET PRICE
 
-    if (df["Target Price"].values / df["Price"].values > 1.2):
+    if df["Target Price"].values / df["Price"].values > 1.2:
         dicts.append(
             {
                 "Ticker": ticker,
@@ -583,15 +561,15 @@ def generate_text_summary_from_info(df, ticker):
             }
         )
         rating = rating + 4
-    elif(df["Target Price"].values / df["Price"].values > 1.0):
+    elif df["Target Price"].values / df["Price"].values > 1.0:
         dicts.append(
             {
                 "Ticker": ticker,
                 "Text": "The average analyst price for the stock in the next 12 months is slightly higher",
-                "Rating": 3,
+                "Rating": 2,
             }
         )
-        rating = rating + 3
+        rating = rating + 2
     else:
         dicts.append(
             {
@@ -604,6 +582,9 @@ def generate_text_summary_from_info(df, ticker):
     # PE RATIO
 
     print(df["P/E"].values)
+
+    if df["P/E"].values == [nan]:
+        df["P/E"] = 0
 
     if df["P/E"].values < 40.0:
         dicts.append(
@@ -698,15 +679,16 @@ def generate_text_summary_from_info(df, ticker):
 
     return dicts, dict_rating
 
+
 def create_prediction_dataset(df):
     x = []
     y = []
     for i in range(50, df.shape[0]):
-        x.append(df[i-50:i, 0])
+        x.append(df[i - 50 : i, 0])
         y.append(df[i, 0])
     x = np.array(x)
     y = np.array(y)
-    return x,y 
+    return x, y
 
 
 def predict_price_new(ticker):
@@ -715,29 +697,25 @@ def predict_price_new(ticker):
     end = dt.datetime.today()
     df_price = web.DataReader(ticker, "yahoo", start, end)
 
-    latest_price = df_price['Open'][-1]
+    latest_price = df_price["Open"][-1]
 
     df = df_price
 
-
     df.shape
 
-    df = df['Open'].values
+    df = df["Open"].values
     df = df.reshape(-1, 1)
 
-    dataset_train = np.array(df[:int(df.shape[0]*0.8)])
-    dataset_test = np.array(df[int(df.shape[0]*0.8):])
+    dataset_train = np.array(df[: int(df.shape[0] * 0.8)])
+    dataset_test = np.array(df[int(df.shape[0] * 0.8) :])
 
-    scaler = MinMaxScaler(feature_range=(0,1))
+    scaler = MinMaxScaler(feature_range=(0, 1))
     dataset_train = scaler.fit_transform(dataset_train)
 
     dataset_test = scaler.transform(dataset_test)
 
-
-
     x_train, y_train = create_prediction_dataset(dataset_train)
     x_test, y_test = create_prediction_dataset(dataset_test)
-
 
     model = Sequential()
     model.add(LSTM(units=96, return_sequences=True, input_shape=(x_train.shape[1], 1)))
@@ -750,23 +728,21 @@ def predict_price_new(ticker):
     model.add(Dropout(0.2))
     model.add(Dense(units=1))
 
-
     x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
-    model.compile(loss='mean_squared_error', optimizer='adam')
+    model.compile(loss="mean_squared_error", optimizer="adam")
 
     model.fit(x_train, y_train, epochs=25, batch_size=32)
-    model.save('stock_prediction_'+ticker+'.h5')
+    model.save("stock_prediction_" + ticker + ".h5")
 
-
-    model = load_model('stock_prediction_'+ticker+'.h5')
-
+    model = load_model("stock_prediction_" + ticker + ".h5")
 
     for i in range(14):
         predictions = model.predict(x_test)
-        print(predictions.shape[0])
-        dataset_test =  np.append(dataset_test, predictions.item(predictions.shape[0] - 2,0))
+        dataset_test = np.append(
+            dataset_test, predictions.item(predictions.shape[0] - 2, 0)
+        )
         dataset_test = np.reshape(dataset_test, (-1, 1))
         x_test, y = create_prediction_dataset(dataset_test)
 
@@ -778,12 +754,12 @@ def predict_price_new(ticker):
 
     predictions_list_perc = [1.0]
 
-    for x in range(len(predictions_list)-1):
-        predictions_list_perc.append(predictions_list[x+1] / predictions_list[0])
+    for x in range(len(predictions_list) - 1):
+        predictions_list_perc.append(predictions_list[x + 1] / predictions_list[0])
 
     predicted_prices = []
 
-    for x in range(len(predictions_list)-1):
+    for x in range(len(predictions_list) - 1):
         predicted_prices.append(round(latest_price * predictions_list_perc[x], 2))
 
     return {"Ticker": ticker, "Prediction": predicted_prices}
@@ -794,43 +770,40 @@ def predict_price_old(ticker):
     end = dt.datetime.today()
     df_price = web.DataReader(ticker, "yahoo", start, end)
 
-    latest_price = df_price['Open'][-1]
+    latest_price = df_price["Open"][-1]
 
     df = df_price
 
-
     df.shape
 
-    df = df['Open'].values
+    df = df["Open"].values
     df = df.reshape(-1, 1)
 
-    dataset_train = np.array(df[:int(df.shape[0]*0.8)])
-    dataset_test = np.array(df[int(df.shape[0]*0.8):])
+    dataset_train = np.array(df[: int(df.shape[0] * 0.8)])
+    dataset_test = np.array(df[int(df.shape[0] * 0.8) :])
 
-    scaler = MinMaxScaler(feature_range=(0,1))
+    scaler = MinMaxScaler(feature_range=(0, 1))
     dataset_train = scaler.fit_transform(dataset_train)
 
     dataset_test = scaler.transform(dataset_test)
 
-
-
     x_train, y_train = create_prediction_dataset(dataset_train)
     x_test, y_test = create_prediction_dataset(dataset_test)
 
-
-    model = load_model('stock_prediction_'+ticker+'.h5')
+    model = load_model("stock_prediction_" + ticker + ".h5")
 
     x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
-    #model.compile(loss='mean_squared_error', optimizer='adam')
+    # model.compile(loss='mean_squared_error', optimizer='adam')
 
-    #model.fit(x_train, y_train, epochs=50, batch_size=32)
-
+    # model.fit(x_train, y_train, epochs=50, batch_size=32)
 
     for i in range(14):
         predictions = model.predict(x_test)
-        dataset_test =  np.append(dataset_test, predictions.item(predictions.shape[0] - 2,0))
+        dataset_test = np.append(
+            dataset_test, predictions.item(predictions.shape[0] - 2, 0)
+        )
         dataset_test = np.reshape(dataset_test, (-1, 1))
         x_test, y = create_prediction_dataset(dataset_test)
 
@@ -842,15 +815,21 @@ def predict_price_old(ticker):
 
     predictions_list_perc = [1.0]
 
-    for x in range(len(predictions_list)-1):
-        predictions_list_perc.append(predictions_list[x+1] / predictions_list[0])
+    for x in range(len(predictions_list) - 1):
+        predictions_list_perc.append(predictions_list[x + 1] / predictions_list[0])
 
     predicted_prices = []
 
-    for x in range(len(predictions_list)-1):
+    for x in range(len(predictions_list) - 1):
         predicted_prices.append(round(latest_price * predictions_list_perc[x], 2))
 
-    return {"Ticker": ticker, "Prediction": predicted_prices}
+    return {
+        "Ticker": ticker,
+        "Prediction": predicted_prices,
+        "Dates": pd.date_range(
+            dt.datetime.today(), dt.datetime.today() - timedelta(days=11), freq="d"
+        ).tolist(),
+    }
 
 
 def parse_yesterdays_articles(ticker, name, tr):
@@ -878,39 +857,48 @@ def parse_yesterdays_articles(ticker, name, tr):
 
         date_time = dt.datetime.strptime(date_time, "%b-%d-%y %H:%M%p ")
 
-        print(date_time.date())
-        print(dt.datetime.today().date())
- 
-
-        if(date_time.date() < dt.datetime.today().date() - dt.timedelta(days=1)): 
+        if date_time.date() < dt.datetime.today().date() - dt.timedelta(days=1):
             break
 
-        if article_text != "" and date_time.date() == dt.datetime.today().date() - dt.timedelta(days=1) and is_article_important(ticker.lower(), name, article_text, title):
-            print("Added")
+        if (
+            article_text != ""
+            and date_time.date() == dt.datetime.today().date() - dt.timedelta(days=1)
+            and is_article_important(ticker.lower(), name, article_text, title)
+        ):
             parsed_data.append(
                 [ticker, date_time, publisher, title, article_link, article_text]
             )
 
     return parsed_data
 
+
 def get_volume(tickerData, period):
     data = tickerData.history(period=period)
-    volume = data.loc[:,"Volume"]
+    volume = data.loc[:, "Volume"]
     return volume
 
+
 def generate_topics(df, name, ticker):
-    stop = set(stopwords.words('english'))
-    exclude = set(string.punctuation)
-    lemma = WordNetLemmatizer()
-    stop.add(name)
-    stop.add("stock")
-    stop.add("company")
-    stop.add("price")
+    stop = set(stopwords.words("english"))  # English stopwords
+    exclude = set(string.punctuation)  # For removing punctation
+    lemma = WordNetLemmatizer()  # Word Lemmanizer
+    extra_words = set(["inc", "fund", name, "stock", "zacks", "share"])
+    start_date = dt.datetime.now() - dt.timedelta(days=14)
+    end_date = dt.datetime.now()
+    mask = (df["Date"] > start_date) & (df["Date"] <= end_date)
+    period = df.loc[mask]
 
-    doc_complete = list(df["Text"])
+    if period.empty:
+        period = df.loc[
+            (df["Date"] > dt.datetime.now() - dt.timedelta(days=30))
+            & (df["Date"] <= end_date)
+        ]
 
-    doc_clean = [clean_topic_text(doc, lemma, exclude, stop).split() for doc in doc_complete]
-
+    doc_complete = list(period["Text"])
+    doc_clean = [
+        clean_topic_text(doc, lemma, exclude, stop, extra_words).split()
+        for doc in doc_complete
+    ]
 
     # Creating the term dictionary of our courpus, where every unique term is assigned an index.
     dictionary = corpora.Dictionary(doc_clean)
@@ -922,48 +910,79 @@ def generate_topics(df, name, ticker):
     Lda = gensim.models.ldamodel.LdaModel
 
     # Running and Trainign LDA model on the document term matrix.
-    ldamodel = Lda(doc_term_matrix, num_topics=10, id2word = dictionary, passes=25)
+    ldamodel = Lda(doc_term_matrix, num_topics=8, id2word=dictionary, passes=18)
+
+    topic_list = []
+
+    for i in range(len(doc_term_matrix)):
+        topic_list.append(ldamodel[doc_term_matrix[i]][0][0])
+
+    topic_count = Counter(topic_list)
 
     dict_topics = []
-    for item in ldamodel.print_topics(num_topics=10, num_words=2):
-        dict_topics.append({"Ticker": ticker, "Topics": re.findall('"([^"]*)"', item[1])})
-
-    print(dict_topics)
-
-    for i in range(10):
-        print(ldamodel[doc_term_matrix[i]])
-
-
+    i = 0
+    for item in ldamodel.print_topics(num_topics=8, num_words=2):
+        dict_topics.append(
+            {
+                "Ticker": ticker,
+                "Topics": re.findall('"([^"]*)"', item[1]),
+                "Percentage": (topic_count[i] / len(topic_list)) * 100,
+            }
+        )
+        i += 1
 
     return dict_topics
 
-def clean_topic_text(doc, lemma, exclude, stop):
+
+def clean_topic_text(doc, lemma, exclude, stop, extra_words):
     stop_free = " ".join([i for i in doc.lower().split() if i not in stop])
-    punc_free = ''.join(ch for ch in stop_free if ch not in exclude)
+    punc_free = "".join(ch for ch in stop_free if ch not in exclude)
     normalized = " ".join(lemma.lemmatize(word) for word in punc_free.split())
-    return normalized
+    final = " ".join([i for i in normalized.lower().split() if i not in extra_words])
+    return final
 
 
+def get_full_ticker_name(ticker):
+    try:
+        finviz_url = "https://finviz.com/quote.ashx?t="
+        url = finviz_url + ticker
 
-new_tickers = ["XOM"]
-new_names = ["exxon"]
+        req = Request(url=url, headers={"user-agent": "my-app"})
+        response = urlopen(req)
+
+        html = bs(response, features="html.parser")
+        title = html.title.string
+        name = " ".join(title.split()[1:-2])
+        name = re.sub(r"[^\w\s]", "", name)
+        return name
+    except Exception:
+        print(Exception)
+        return
 
 
+#
+#
+new_tickers = ["V"]
+new_names = ["visa"]
 
 
 metric = [
-        "P/B",
-        "P/E",
-        "Target Price",
-        "RSI (14)",
-        "Volatility",
-        "EPS (ttm)", 
-        "Dividend %",
-        "ROE",
-        "ROI",
-        "Price",
-        "Insider Own",
-    ]
+    "P/B",
+    "P/E",
+    "Target Price",
+    "RSI (14)",
+    "Volatility",
+    "EPS (ttm)",
+    "Dividend %",
+    "ROE",
+    "ROI",
+    "Price",
+    "Insider Own",
+]
+
+client = MongoClient(
+    "mongodb+srv://andrisvaivods11:andyPandy2000!@cluster0.4ozrv.mongodb.net/test"
+)
 
 
 # LOOP FOR NEW TICKERS
@@ -972,7 +991,6 @@ for index, ticker in enumerate(new_tickers):
 
     name = new_names[index]
 
-
     parsed_data = []
 
     tickerData = yf.Ticker(ticker)
@@ -980,36 +998,23 @@ for index, ticker in enumerate(new_tickers):
     df_recom = tickerData.recommendations
     df_cal = tickerData.calendar
 
-
-    volume_df = get_volume(tickerData, "1y")
-    print(volume_df)
-
-
+    full_name = get_full_ticker_name(ticker)
 
     df_recom_last_4 = df_recom.iloc[-4:]
     dict_recom_last_4 = create_dict_for_anaylst_ratings(df_recom_last_4, ticker)
 
     df_recoms, dict_total_in_year = parse_analyst_ratings(df_recom, ticker)
 
-
-
-
     print("GETTING ARTICLES")
     articles = get_all_articles(ticker)
     parsed_data = parse_articles(ticker, name, articles.find_all("tr"))
-
 
     df = pd.DataFrame(
         parsed_data, columns=["Ticker", "Date", "Publisher", "Title", "Link", "Text"]
     )
 
-
-    print("GENERATING TOPICS")
-    dict_topics = generate_topics(df, name, ticker)
-
     print("GETTING TITLE SENTIMENT")
     df = get_title_sentiment(df)
-
 
     print("GETTING TEXT SENTIMENT")
 
@@ -1025,22 +1030,18 @@ for index, ticker in enumerate(new_tickers):
         }
     )
 
-    print(df_text_sent)
-
+    print("GENERATING TOPICS")
+    dict_topics = generate_topics(df, name, ticker)
 
     df = df.join(df_text_sent, rsuffix="_right")
 
     print("GETTING PRICE")
     df_price = get_stock_price(ticker, 365)
     df_price["20MA"] = df_price["Adj Close"].rolling(window=20, min_periods=0).mean()
-
-
-    print("GETTING VOLUME")
+    df_price["50MA"] = df_price["Adj Close"].rolling(window=50, min_periods=0).mean()
 
     print("MAKING PREDICTIONS")
     dict_prediction = predict_price_new(ticker)
-
-
 
     print("GETTING STOCK INFO")
     df_info = pd.DataFrame(index=[ticker], columns=metric)
@@ -1053,17 +1054,14 @@ for index, ticker in enumerate(new_tickers):
     df_info["ROI"] = df_info["ROI"].str.replace("%", "")
     df_info["Volatility"] = volatility[0][0].replace("%", "")
     df_info["Insider Own"] = df_info["Insider Own"].str.replace("%", "")
+    df_info["Name"] = full_name
 
     df_info = df_info.apply(pd.to_numeric, errors="coerce")
-
 
     df_info["Ticker"] = df_info.index
     df_info.index = range(1, len(df_info) + 1)
 
-
     dicts_info_text, dict_rating = generate_text_summary_from_info(df_info, ticker)
-
-
 
     df["average_neg"] = round(df[["neg", "neg_text"]].mean(axis=1), 2)
     df["average_pos"] = round(df[["pos", "pos_text"]].mean(axis=1), 2)
@@ -1081,51 +1079,157 @@ for index, ticker in enumerate(new_tickers):
             "compound",
             "compound_text",
         ]
-    )   
-
+    )
 
     latest_article_df = get_latest_articles(df)
     df_avg_comp = summerize_article_sentiment_by_day(df, ticker)
-    print(df_avg_comp)
+
+    df_info["7-day Sent"] = round(df_avg_comp.iloc[-1]["7MA"], 2)
+    target_price_ratio = (df_info["Target Price"] / df_info["Price"]) * 100
+    target_price_ratio = target_price_ratio - 100
+    df_info["Target Price %"] = target_price_ratio
 
     print("INSERTING NEW DATA")
     for df_recom in df_recoms:
-        insert_dict_into_db(df_recom, "analyst_ratings")
+        insert_dict_into_db(df_recom, "analyst_ratings", client)
     for dict in dicts_info_text:
-        insert_dict_into_db(dict, "text_summary")
+        insert_dict_into_db(dict, "text_summary", client)
     for dict in dict_topics:
-        insert_dict_into_db(dict, "topics")
+        insert_dict_into_db(dict, "topics", client)
 
-    insert_dict_into_db(dict_rating, "stock_rating")
-    insert_dict_into_db(dict_prediction, "price_prediction")
-    insert_dict_into_db(dict_recom_last_4, "latest_analyst_ratings")
-    insert_dict_into_db(dict_total_in_year, "analyst_total")
-    insert_df_into_db(df_price, "stock_price")
-    insert_df_into_db(df_avg_comp, "avg_sentiment")
-    insert_df_into_db(latest_article_df, "latest_articles")
-    insert_df_into_db(df_info, "stocks_info")
-    insert_df_into_db(df, "articles")
-
-
-    # TODO REMOVE LAST 3 SENTENCES FOE ARTICLES
-    # TODO UPDATE STOCK PREDICTOR
-    # TODO GET LAST ITEM IN LIST IN PREDICTOR
-
-    # TODO MAKE STOCK SCREENER
-    # TODO ADD TOOLTIPS FOR GRAPHS
+    insert_dict_into_db(dict_rating, "stock_rating", client)
+    insert_dict_into_db(dict_prediction, "price_prediction", client)
+    insert_dict_into_db(dict_recom_last_4, "latest_analyst_ratings", client)
+    insert_dict_into_db(dict_total_in_year, "analyst_total", client)
+    insert_df_into_db(df_price, "stock_price", client)
+    insert_df_into_db(df_avg_comp, "avg_sentiment", client)
+    insert_df_into_db(latest_article_df, "latest_articles", client)
+    insert_df_into_db(df_info, "stocks_info", client)
+    insert_df_into_db(df, "articles", client)
 
 
-# LOOP FOR OLD TICKERS (UPDATE)
+#
+old_tickers = [
+    "AMZN",
+    "TSLA",
+    "BABA",
+    "AAPL",
+    "GOOGL",
+    "MA",
+    "DIS",
+    "INTC",
+    "NFLX",
+    "NVDA",
+    "PINS",
+    "GME",
+    "MSFT",
+    "JPM",
+    "NKE",
+    "SPOT",
+    "PLTR",
+    "ADBE",
+    "PYPL",
+    "ROKU",
+    "QCOM",
+    "WMT",
+    "PFE",
+    "XOM",
+    "KO",
+    "VZ",
+    "ORCL",
+    "JNJ",
+    "BAC",
+    "TGT",
+    "MCD",
+    "PEP",
+    "EA",
+    "COF",
+    "TWTR",
+    "CAT",
+    "ABT",
+    "CRM",
+    "WFC",
+    "NEE",
+    "RTX",
+    "TMUS",
+    "HON",
+    "ADI",
+    "PG",
+    "F",
+    "EBAY",
+    "UPST",
+    "SHOP",
+    "UNP",
+    "MMM",
+    "HD",
+    "DAL",
+]
 
 
-old_tickers = ["AMZN", "TSLA", "BABA", "AAPL", "GOOGL", "MA", "DIS", "INTC", "NFLX", "NVDA", "PINS", 
-            "GME", "MSFT", "JPM", "NKE", "SPOT", "PLTR", "ADBE", "PYPL", "ROKU", "QCOM", "WMT", "PFE"]
-old_names = ["amazon", "tesla", "alibaba", "apple", "google", "mastercard", "disney", "intel", "netflix", "nvidia", "pinterest", 
-            "gamestop", "microsoft", "jpmorgan", "nike", "spotify", "palantir", "adobe", "paypal", "roku", "qualcomm", "walmart", "pfizer"]
+old_names = [
+    "amazon",
+    "tesla",
+    "alibaba",
+    "apple",
+    "google",
+    "mastercard",
+    "disney",
+    "intel",
+    "netflix",
+    "nvidia",
+    "pinterest",
+    "gamestop",
+    "microsoft",
+    "jpmorgan",
+    "nike",
+    "spotify",
+    "palantir",
+    "adobe",
+    "paypal",
+    "roku",
+    "qualcomm",
+    "walmart",
+    "pfizer",
+    "exxon",
+    "coca cola",
+    "verizon",
+    "oracle",
+    "johnson  johnson",
+    "bank of america",
+    "target",
+    "mcdonald s",
+    "pepsico",
+    "electronic arts",
+    "capital one",
+    "twitter",
+    "caterpillar",
+    "abbott",
+    "salesforce",
+    "wells fargo",
+    "nextera",
+    "raytheon",
+    "t mobile",
+    "honeywell",
+    "analog devices",
+    "procter   gamble",
+    "ford",
+    "ebay",
+    "upstar",
+    "shopify",
+    "union pacific",
+    "3m",
+    "home",
+    "delta",
+]
+
 
 for index, ticker in enumerate(old_tickers):
 
     name = old_names[index]
+
+    full_name = get_full_ticker_name(ticker)
+
+    print(ticker)
 
     tickerData = yf.Ticker(ticker)
 
@@ -1137,15 +1241,14 @@ for index, ticker in enumerate(old_tickers):
 
     df_recoms, dict_total_in_year = parse_analyst_ratings(df_recom, ticker)
 
-
     print("GETTING ARTICLES FROM DB")
 
     articles_from_db_df = get_articles_from_db(ticker)
 
-
     print("GETTING PRICE")
     df_price = get_stock_price(ticker, 365)
     df_price["20MA"] = df_price["Adj Close"].rolling(window=20, min_periods=0).mean()
+    df_price["50MA"] = df_price["Adj Close"].rolling(window=50, min_periods=0).mean()
 
     dict_prediction = predict_price_old(ticker)
 
@@ -1156,7 +1259,6 @@ for index, ticker in enumerate(old_tickers):
     df = pd.DataFrame(
         parsed_data, columns=["Ticker", "Date", "Publisher", "Title", "Link", "Text"]
     )
-
 
     print("GETTING TITLE SENTIMENT")
     df = get_title_sentiment(df)
@@ -1183,47 +1285,41 @@ for index, ticker in enumerate(old_tickers):
         df["average_comp"] = round(df[["compound", "compound_text"]].mean(axis=1), 2)
 
         df = df.drop(
-        columns=[
-            "neu",
-            "pos",
-            "neg",
-            "neu_text",
-            "pos_text",
-            "neg_text",
-            "compound",
-            "compound_text",
-        ]
-    )
-
-        df_concat = pd.concat([articles_from_db_df, df])
+            columns=[
+                "neu",
+                "pos",
+                "neg",
+                "neu_text",
+                "pos_text",
+                "neg_text",
+                "compound",
+                "compound_text",
+            ]
+        )
 
     except:
         print("No Important articles")
-        df_concat = articles_from_db_df
 
-    
+    df_concat = pd.concat([articles_from_db_df, df])
 
     print("GENERATING TOPICS")
     dict_topics = generate_topics(df_concat, name, ticker)
-
-
 
     print("GETTING STOCK INFO")
     df_info = pd.DataFrame(index=[ticker], columns=metric)
     df_info = get_fundamental_data(df_info)
 
-    volatility = df_info["Volatility"].str.split()
-
     df_info["Dividend %"] = df_info["Dividend %"].str.replace("%", "")
     df_info["ROE"] = df_info["ROE"].str.replace("%", "")
     df_info["ROI"] = df_info["ROI"].str.replace("%", "")
+    volatility = df_info["Volatility"].str.split()
     df_info["Volatility"] = volatility[0][0].replace("%", "")
     df_info["Insider Own"] = df_info["Insider Own"].str.replace("%", "")
     df_info = df_info.apply(pd.to_numeric, errors="coerce")
+    df_info["Name"] = full_name
 
     df_info["Ticker"] = df_info.index
     df_info.index = range(1, len(df_info) + 1)
-
 
     dicts_info_text, dict_rating = generate_text_summary_from_info(df_info, ticker)
 
@@ -1232,44 +1328,46 @@ for index, ticker in enumerate(old_tickers):
 
     df_avg_comp = summerize_article_sentiment_by_day(df_concat, ticker)
 
+    df_info["7-day Sent"] = round(df_avg_comp.iloc[-1]["7MA"], 2)
+    target_price_ratio = (df_info["Target Price"] / df_info["Price"]) * 100
+    target_price_ratio = target_price_ratio - 100
+    df_info["Target Price %"] = target_price_ratio
 
+    latest_article_df = latest_article_df.set_index("Date")
+    latest_article_df = latest_article_df.drop(columns=["_id"])
 
-
-    latest_article_df =  latest_article_df.set_index('Date')
-    latest_article_df =  latest_article_df.drop(columns=['_id'])
+    dict_ticker_names = {"Tickers": old_tickers, "Names": old_names}
 
     print("DELETING OLD DATA")
-    delete_from_collection(ticker, "stocks_info")
-    delete_from_collection(ticker, "stock_price")
-    delete_from_collection(ticker, "analyst_ratings")
-    delete_from_collection(ticker, "price_prediction")
-    delete_from_collection(ticker, "text_summary")
-    delete_from_collection(ticker, "analyst_total")
-    delete_from_collection(ticker, "avg_sentiment")
-    delete_from_collection(ticker, "stock_rating")
-    delete_from_collection(ticker, "latest_articles")
-    delete_from_collection(ticker, "latest_analyst_ratings")
-    delete_from_collection(ticker, "topics")
-
+    delete_from_collection(ticker, "stocks_info", client)
+    delete_from_collection(ticker, "stock_price", client)
+    delete_from_collection(ticker, "analyst_ratings", client)
+    delete_from_collection(ticker, "price_prediction", client)
+    delete_from_collection(ticker, "text_summary", client)
+    delete_from_collection(ticker, "analyst_total", client)
+    delete_from_collection(ticker, "avg_sentiment", client)
+    delete_from_collection(ticker, "stock_rating", client)
+    delete_from_collection(ticker, "latest_articles", client)
+    delete_from_collection(ticker, "latest_analyst_ratings", client)
+    delete_from_collection(ticker, "topics", client)
+    clear_collection("stocks", client)
 
     print("INSERTING NEW DATA")
     for df_recom in df_recoms:
-        insert_dict_into_db(df_recom, "analyst_ratings")
+        insert_dict_into_db(df_recom, "analyst_ratings", client)
     for dict in dicts_info_text:
-        insert_dict_into_db(dict, "text_summary")
+        insert_dict_into_db(dict, "text_summary", client)
     for dict in dict_topics:
-        insert_dict_into_db(dict, "topics")
-    insert_dict_into_db(dict_rating, "stock_rating")
-    insert_df_into_db(df_avg_comp, "avg_sentiment")
-    insert_dict_into_db(dict_prediction, "price_prediction")
-    insert_dict_into_db(dict_recom_last_4, "latest_analyst_ratings")
-    insert_dict_into_db(dict_total_in_year, "analyst_total")
-    insert_df_into_db(df_price, "stock_price")
-    insert_df_into_db(latest_article_df, "latest_articles")
-    insert_df_into_db(df_info, "stocks_info")
+        insert_dict_into_db(dict, "topics", client)
+    insert_dict_into_db(dict_rating, "stock_rating", client)
+    insert_df_into_db(df_avg_comp, "avg_sentiment", client)
+    insert_dict_into_db(dict_prediction, "price_prediction", client)
+    insert_dict_into_db(dict_ticker_names, "stocks", client)
+    insert_dict_into_db(dict_recom_last_4, "latest_analyst_ratings", client)
+    insert_dict_into_db(dict_total_in_year, "analyst_total", client)
+    insert_df_into_db(df_price, "stock_price", client)
+    insert_df_into_db(latest_article_df, "latest_articles", client)
+    insert_df_into_db(df_info, "stocks_info", client)
 
-    if(not df.empty):
-        insert_df_into_db(df, "articles")
-
-
-
+    if not df.empty:
+        insert_df_into_db(df, "articles", client)
