@@ -24,6 +24,8 @@ var global_info_all;
 var global_articles;
 var global_text_summary;
 var global_prediction;
+var global_stock_names;
+var global_stock_rating;
 
 const { MongoClient } = require("mongodb");
 const { Console } = require("console");
@@ -33,7 +35,7 @@ MongoClient.connect(uri, function (err, db) {
     if (err) throw err;
     var dbo = db.db("capstone_project");
 
-    dbo.collection("stocks").find({}).toArray(function (err, result) {
+    dbo.collection("stock_price").find({}).toArray(function (err, result) {
         if (err) throw err;
         globalresult = result
     });
@@ -41,6 +43,11 @@ MongoClient.connect(uri, function (err, db) {
     dbo.collection("analyst_ratings").find().toArray(function (err, result) {
         if (err) throw err;
         global_analyst = result
+    });
+
+    dbo.collection("stock_rating").find().toArray(function (err, result) {
+        if (err) throw err;
+        global_stock_rating = result
     });
 
     dbo.collection("latest_articles").find().toArray(function (err, result) {
@@ -76,6 +83,11 @@ MongoClient.connect(uri, function (err, db) {
         global_info = result
         //db.close();
     });
+    dbo.collection("stocks").find().toArray(function (err, result) {
+        if (err) throw err;
+        global_stock_names = result
+        //db.close();
+    });
     dbo.collection("topics").find().toArray(function (err, result) {
         if (err) throw err;
         global_topics = result
@@ -92,8 +104,8 @@ app.get('/stock/:ticker', (req, res) => {
     res.render("index", { ticker: stock })
 })
 
-app.get('/', (req, res) => {
-    res.render("search", { text: "123" })
+app.get('', (req, res) => {
+    res.render("search", { stock_names: "test" })
 })
 
 
@@ -130,6 +142,17 @@ app.get('/info/:ticker', (req, res) => {
     res.json(result)
 })
 
+app.get('/rating/:ticker', (req, res) => {
+    var result = []
+    var query = req.params.ticker
+    global_stock_rating.forEach(element => {
+        if(element["Ticker"] === query){
+            result.push(element)
+        }
+    });
+    res.json(result)
+})
+
 
 app.get('/analyst/:ticker', (req, res) => {
     var result = []
@@ -154,9 +177,6 @@ app.get('/text_summary/:ticker', (req, res) => {
     res.json(result)
 })
 
-app.get('/text_summary/:ticker', (req, res) => {
-    res.render("search")
-})
 
 
 app.get('/analyst_total/:ticker', (req, res) => {
@@ -193,7 +213,11 @@ app.get('/analyst_latest/:ticker', (req, res) => {
 })
 
 app.get('/info_all', (req, res) => {
-    res.json(global_info_all)
+    res.json(global_info)
+})
+
+app.get('/stock_names', (req, res) => {
+    res.json(global_stock_names)
 })
 
 app.get('/article_sent/:ticker', (req, res) => { 

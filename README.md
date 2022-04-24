@@ -2,6 +2,8 @@
 
 
 
+
+
 <div id="top" align="center">
 <img src="images/screenshot.png" alt="Project Image">
 </div>
@@ -24,15 +26,8 @@
     <br />
     <br />
     <a href="https://cseegit.essex.ac.uk/ce301_21-22/CE301_vaivods_andris_j"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="">View Demo</a>
-    ·
-    <a href="">Report Bug</a>
-    ·
-    <a href="">Request Feature</a>
-  </p>
 </div>
+
 
 
 
@@ -46,19 +41,18 @@
         <li><a href="#built-with">Built With</a></li>
     </li>
     <li><a href="#getting-started">Getting Started</a></li>
-     <li><a href="#technical-documention">Code Walkthrough</a></li>
+     <li><a href="#code-walkthrough">Code Walkthrough</a></li>
       <ul>
-        <li><a href="#prerequisites">Web Scraping</a></li>
-        <li><a href="#installation">Sentiment Analyisis</a></li>
-        <li><a href="#installation">Topic Extraction</a></li>
-        <li><a href="#installation">Additional Data Metrics and Feature Extraction</a></li>
-        <li><a href="#installation">Future Price Prediction</a></li>
-        <li><a href="#installation">Database</a></li>
-        <li><a href="#installation">Database Schema</a></li>
-        <li><a href="#installation">Unit Testing</a></li>
+        <li><a href="#web-scraping">Web Scraping</a></li>
+        <li><a href="#text-sentiment">Sentiment Analysis</a></li>
+        <li><a href="#topic-extraction">Topic Extraction</a></li>
+        <li><a href="#additional-data-metrics">Additional Data Metrics and Feature Extraction</a></li>
+        <li><a href="#price-prediction">Future Price Prediction</a></li>
+        <li><a href="#database">Database</a></li>
+        <li><a href="#schema">Database Schema</a></li>
+        <li><a href="#testing">Unit Testing</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage Examples</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -121,7 +115,7 @@ In the <a href="#stock-screener">Stock Screener</a> the user can Filter by 12 di
 
 
 #### Landing Page
-On the Landing Page, users can search for specif stocks, by their tickers, as well as open a random stock dashboard by clicking the "I'm Feeling Lucky" button. If the user searches for a stock that is not available an error message will appear. 
+On the Landing Page, users can search for specific stocks, by their tickers, as well as open a random stock dashboard by clicking the "I'm Feeling Lucky" button. If the user searches for a stock that is not available an error message will appear. 
 
 <div id="image" align="center">
 <img src="images/search.png" alt="Search">
@@ -194,13 +188,14 @@ A price target is a price at which an analyst believes a stock to be fairly valu
 
 
 #### Informational Tooltips
+The fundemetal Metrics section has infoamtion ltooltips decribing each metric. This is especially useful for new investors. 
 
 <div id="image" align="center">
-<img src="images/volatility.png" alt="Volatility">
+<img src="images/tooltips.gif" alt="Tooltips">
 </div>
 
 #### Latest Articles
-In the middle right section of the dashboard, there are the latest articles about the stock. The user can view the publisher, title and the sentiment of the text. The user can also view the whole article by clicking on it. 
+In the middle right section of the dashboard are the latest articles about the stock. The user can view the publisher, title and the sentiment of the text. The user can also view the whole article by clicking on it. 
 
 <div id="image" align="center">
 <img src="images/latest_articles.png" alt="Latest Articles">
@@ -245,7 +240,7 @@ The bottom left section contains a doughnut chart with all the analyst ratings i
 
 #### Stock Price Predictions
 
-In the middle right section is the predicted stock price for the two weeks. The price is calculated using a neural network with historical prices and moving averages. The graph also has a lower and upper bound which increases as the uncertainty of the price increases. It would not be recommended to follow these predictions precisely but they could be sued as a momentum indicator. 
+The predicted stock price for the two weeks is in the middle right section. The price is calculated using a neural network with historical prices and moving averages. The graph also has a lower and upper bound which increases as the uncertainty of the price increases. It would not be recommended to follow these predictions precisely but they could be sued as a momentum indicator. 
 
 <div id="image" align="center">
 <img src="images/prediction.png" alt="Prediction">
@@ -318,7 +313,7 @@ In this section, I discuss the code and walk through the main functions.
 ~~~
 
 ### Web Scraping
-The first step for each stock is extracting the relevant information from the web such as the articles and fundamental information. Data such as the historic price and analyst ratings are gathered using the Yahoo finance API. For web scraping, I used the Requests library to open the corresponding stock page on FINVIZ as well as to open the original article page. 
+The first step for each stock is extracting the relevant information from the web such as the articles and fundamental information. The Yahoo finance API gathers data such as the historic price and analyst ratings. For web scraping, I used the Requests library to open the corresponding stock page on FINVIZ as well as to open the original article page. 
 ~~~python
 def get_all_articles(ticker):
     finviz_url = "https://finviz.com/quote.ashx?t="
@@ -457,13 +452,14 @@ When the data about the stock has been scraped I clean it, by removing the perce
 
 ~~~
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Topic Extraction
 Topics from the text are extracted using an LDA model that's available through the Gensim library.
-First sets of stopwords, punctions and extra words like the name of the company and other words that would not add any value to the topics are finalized.  Also, a word Lemmatizer ius inilized that will change thw ords to their base forms. 
+First sets of stopwords, punctions and extra words like the name of the company and other words that would not add any value to the topics are finalized.  Also, a word Lemmatizer is initialized that will change the words to their base forms. 
 ~~~python
 def generate_topics(df, name, ticker):
-    stop = set(stopwords.words("english"))  
+    stop = set(stopwords.words("English"))  
     exclude = set(string.punctuation)  
     lemma = WordNetLemmatizer() 
     extra_words = set(["inc",  name, ... "share"])
@@ -487,7 +483,7 @@ After the artciles are filtered, the text ofd the artciles is saved in a list an
         for doc in doc_complete
     ]
 ~~~
-In the clean topic text funtion stopwords and puncation are removed. Then the rmeaining words are lemmitized and finally the extra words are removed. 
+In the clean topic text function, stopwords and punctuation are removed. Then the remaining words are lemmatized and finally, the extra words are removed. 
 ~~~python
 
 def clean_topic_text(doc, lemma, exclude, stop, extra_words):
@@ -502,12 +498,12 @@ The articles are then put into a term dictionary where each term is assigned an 
 ~~~python
     dictionary = corpora.Dictionary(doc_clean)
 ~~~
-Now the list of filtered docucents are put into a document-term matrix. A document-term matrix describes the frequency of terms that occur in all ther articles.
+Now the list of filtered documents are put into a document-term matrix. A document-term matrix describes the frequency of terms that occur in all the articles.
 ~~~python
     doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_clean]
 ~~~
 
-Now the LDA model is inilized using the Gensim library. The document-term matrix togetger wiht the term dictionary are used to train the model. It genreates 8 topics and passes trhpugh the articles 18 times. 
+Now the LDA model is initialized using the Gensim library. The document-term matrix together with the term dictionary is used to train the model. It generates 8 topics and passes through the articles 18 times. 
 ~~~python
     Lda = gensim.models.ldamodel.LdaModel
     ldamodel = Lda(doc_term_matrix, num_topics=8, id2word=dictionary, passes=18)
@@ -521,7 +517,7 @@ After the model is trained the generated topics are extracted and the amount of 
     topic_count = Counter(topic_list)
 ~~~
 
-The topics togthetr with the percetage of all articles that are about the topic are saved to a dictionar. The topics are used in the <a href="#latest-article-topics">Latest Article Topics</a> section.
+The topics together with the percentage of all articles that are about the topic are saved in a dictionary. The topics are used in the <a href="#latest-article-topics">Latest Article Topics</a> section.
 ~~~python
 
     dict_topics = []
@@ -540,6 +536,7 @@ The topics togthetr with the percetage of all articles that are about the topic 
 
 ~~~
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Text Sentiment
 
@@ -638,9 +635,10 @@ def get_latest_articles(df):
     df_latest = df.tail(4)
     return df_latest
 ~~~
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Additional Data metrics
-To acquire the historic price for <a href="#historic-price">Historic Price</a> section. I use the ```pandas_datareader``` library. On the website, I only use the closing price, so I drop the other columns. I also round the price to two decimal places for convenience and generate the 20 day moving average prices using the ```df. rolling()``` function.
+To acquire the historic price for <a href="#historic-price">Historic Price</a> section. I use the ```pandas_datareader``` library. On the website, I only use the closing price, so I drop the other columns. I also round the price to two decimal places for convenience and generate the 20-day moving average prices using the ```df. rolling()``` function.
 
 ~~~python
 def get_stock_price(ticker, days):
@@ -687,9 +685,10 @@ def create_dict_for_anaylst_ratings(df, ticker):
     return dict
 ~~~
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Price Prediction
-To predict the future price of the stock I used the historic price as well as Moving Averages as a feature. I used a Longo Short Term Memory (LSTM) Neural Network because it is good for predicting time series data. To prepare the dataset and model I used the TensorFlow and gensim  libraries.
+To predict the future price of the stock I used the historic price as well as Moving Averages as a feature. I used a Longo Short Term Memory (LSTM) Neural Network because it is good for predicting time series data. To prepare the dataset and model I used the TensorFlow and gensim libraries.
 First I acquired the historic price for the last 2500 days (or the maximum available if there isn't any data going back so far). I picked 2500 because it is enough days to make reasonable predictions without making the model slow. Since I have to make these predictions for each stock in the database, speed is quite important. I gather the price using Yahoo finance.
 ~~~python
 start = dt.datetime.today() - timedelta(days=2500)
@@ -740,7 +739,7 @@ Now its time to setup the LSTM model. The model consists of 4 LSTM layers, 4 Dro
 ~~~
 
 
-Now its time to compile the model. The loss fuction used is mean squered error and the opimzer is the Adam optimzer. Adam is a replacement optimization algorithm for  gradient descent for training deep learning models. AFter this the model is fitted with the training data. 25 epochs means that the data is passed trhpoug the model 25 times. 
+Now it's time to compile the model. The loss function used is the mean squared error and the optimizer is the Adam optimizer. Adam is a replacement optimization algorithm for gradient descent for training deep learning models. After this, the model is fitted with the training data. 25 epochs mean that the data is passed through the model 25 times. 
 ~~~python
     model.compile(loss='mean_squared_error', optimizer='adam')
     model.fit(x_train, y_train, epochs=25, batch_size=32)
@@ -777,12 +776,9 @@ After the predictions are made the data is scaled back to its orginal form and t
 ~~~
 
 
-~~~python
-
-~~~
 
 
-
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Database
 For the database, I use the MongoDB Atlas cloud database. I chose Atlas because it offers 500MB of free storage, I have been wanting to learn how to use MongoDB for quite some time, and because the Python MongoDB library is easy to learn and has good documentation. Before deleting or inserting data, initialise the ``` MongoClient()```, this will be sued for connection to the collection
@@ -835,29 +831,42 @@ In total there are 13 collections in the database:
 
 ### Testing
 The backend code contains many unit tests. Here are a few examples.
-
-
+Testing whether the ``` get_all_articles()``` function correcly returns the news table or throws an error if the ticker is not available.
 ~~~python
+    def test_get_all_articles(self):
+        ticker = "AMZN"
+        finviz_url = "https://finviz.com/quote.ashx?t="
+        url = finviz_url + ticker
+        req = Request(url=url, headers={"user-agent": "my-app"})
+        response = urlopen(req)
+        html = bs(response, features="html.parser")
+        news_table = html.find(id="news-table")
+        self.assertEqual(sns.get_all_articles(ticker), news_table)
+        ticker = "amzn"
+        self.assertEqual(sns.get_all_articles(ticker), news_table)
+        ticker = "testing123"
+        self.assertEqual(sns.get_all_articles(ticker), None)
 
 ~~~
-
+Testing if ``` is_article_important()``` has the correct response to having name of the stock in title or text. 
 ~~~python
-
+    def test_is_article_important(self):
+        self.assertEqual(sns.is_article_important(ticker="AMZN", name="amazon", article="", title=""), False)
+        self.assertEqual(sns.is_article_important(ticker="AMZN", name="amazon", article="", title="amzn"), True)
+        self.assertEqual(sns.is_article_important(ticker="AMZN", name="amazon", article="AMAZON", title=""), False)
+~~~
+Testing whether the price predctions made in ``` predict_price_old()``` return the correct tikcer wiht the dates and predictions.
+~~~python
+    def test_predict_price_old(self):
+        result = sns.predict_price_old("BABA")
+        self.assertTrue("BABA" in result)
+        self.assertTrue("Dates" in result)
+        self.assertTrue("Prediction" in result)
+        self.assertEqual(sns.predict_price_old("TESTING123"), None)
 ~~~
 
-~~~python
 
-~~~
-
-~~~python
-
-~~~
-
-~~~python
-
-~~~
-
-
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- GETTING STARTED -->
@@ -891,31 +900,6 @@ To get a local copy of the website up and running follow these simple example st
  4.  Go to [http://localhost:5000/](http://localhost:5000)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-
-
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-
-
 
 
 <!-- LICENSE -->
