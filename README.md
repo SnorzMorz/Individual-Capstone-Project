@@ -115,7 +115,7 @@ In the <a href="#stock-screener">Stock Screener</a> the user can Filter by 12 di
 
 
 #### Landing Page
-On the Landing Page, users can search for specific stocks, by their tickers, as well as open a random stock dashboard by clicking the "I'm Feeling Lucky" button. If the user searches for a stock that is not available an error message will appear. 
+On the Landing Page, users can search for specif stocks, by their tickers, as well as open a random stock dashboard by clicking the "I'm Feeling Lucky" button. If the user searches for a stock that is not available an error message will appear. 
 
 <div id="image" align="center">
 <img src="images/search.png" alt="Search">
@@ -156,7 +156,7 @@ To better visualize the index,  I colour coded the number (green for under 35% a
 
 #### Dividend
 
-A dividend is the distribution of corporate profits to eligible shareholders, usually measured in terms of a percentage relative to stock price. It can be used as a value indicator as well as an indicator of how profitable a stock is. 
+A dividend is the distribution of corporate profits to eligible shareholders, usually measured in terms of a percentage relative to stock price. It can be used as a value indicator as well as an indicator of how profitable the stock is. 
 To better visualize the dividend,  I colour coded the number (green for over 5% and red for 0%) as well as used a speedometer/progress bar.
 
 <div id="image" align="center">
@@ -188,7 +188,7 @@ A price target is a price at which an analyst believes a stock to be fairly valu
 
 
 #### Informational Tooltips
-The fundemetal Metrics section has infoamtion ltooltips decribing each metric. This is especially useful for new investors. 
+The fundamental Metrics section has informational tooltips describing each metric. This is especially useful for new investors. 
 
 <div id="image" align="center">
 <img src="images/tooltips.gif" alt="Tooltips">
@@ -209,10 +209,10 @@ In the bottom right section of the dashboard, the user can view daily sentiment 
 </div>
 
 #### Latest Article Topics
-In the middle left section, the user can view the latest topics for articles. This gives the user a quick glimpse into what topics the public is talking about and could give ideas into what the user should do more research into.
+In the middle left section, the user can view the latest topics for articles. This gives the user a quick glimpse into what topics the public is talking about and could give ideas into what the user should do more research into. Each topic is made out of two words and in the donut chart the user can see what percentage of articles are about the specific topic.
 
 <div id="image" align="center">
-<img src="images/volatility.png" alt="Volatility">
+<img src="images/volatility.png" alt="Topics">
 </div>
 
 #### Latest analyst ratings
@@ -280,7 +280,7 @@ In the Stock, Screener users can filter by twelve different metrics to find stoc
 After clicking submit the result of the filtering will appear. Here the user can open the Dashboard of the stock by clicking on the ticker and sort by specif values by cling on the table header. 
 
 <div id="image" align="center">
-<img src="images/volatility.png" alt="Volatility">
+<img src="images/screener_results.png" alt="Screener Results">
 </div>
 
 The user can also pick from 3 different preset filters - Value, Growth and Oversold. These can be helful for new investors looking for a specifc investment.
@@ -297,20 +297,19 @@ The user can also pick from 3 different preset filters - Value, Growth and Overs
 * [NLTK](https://www.nltk.org/)
 * [Beautiful soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 * [Gensim](https://radimrehurek.com/gensim/)
-* Finviz.com
-* Yahoo Finanace API
-* Tensorflow
-* Hosted with [Heroku](https://www.heroku.com/)
-* Cloud storage with [MongoDB]()
+* [scikit-learn](https://scikit-learn.org/stable/)
+* [Pandas](https://pandas.pydata.org/)
+* [FINVIZ](https://finviz.com/)
+* [Yahoo Finanace API](https://python-yahoofinance.readthedocs.io/en/latest/api.html)
+* [Tensorflow](https://www.tensorflow.org/)
+* [Heroku](https://www.heroku.com/)
+*  [MongoDB](https://www.mongodb.com/atlas/database)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 ## Code Walkthrough 
 In this section, I discuss the code and walk through the main functions.
-
-~~~python
-~~~
 
 ### Web Scraping
 The first step for each stock is extracting the relevant information from the web such as the articles and fundamental information. The Yahoo finance API gathers data such as the historic price and analyst ratings. For web scraping, I used the Requests library to open the corresponding stock page on FINVIZ as well as to open the original article page. 
@@ -775,13 +774,10 @@ After the predictions are made the data is scaled back to its orginal form and t
     
 ~~~
 
-
-
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Database
-For the database, I use the MongoDB Atlas cloud database. I chose Atlas because it offers 500MB of free storage, I have been wanting to learn how to use MongoDB for quite some time, and because the Python MongoDB library is easy to learn and has good documentation. Before deleting or inserting data, initialise the ``` MongoClient()```, this will be sued for connection to the collection
+For the database, I use the MongoDB Atlas cloud database. I chose Atlas because it offers 500MB of free storage. Also because  I have been wanting to learn how to use MongoDB for quite some time, and because the Python MongoDB library is easy to learn and has good documentation. Before deleting or inserting data, initialize the ``` MongoClient()```, this will be used for connecting to the database.
 ~~~python
 client = MongoClient(
     "mongodb+srv://andrisvaivods11:password@cluster0.4ozrv.mongodb.net/test")
@@ -826,7 +822,7 @@ In total there are 13 collections in the database:
 ### Schema
 
 <div id="image" align="center">
-<img src="images/erd.png" alt="ERD">
+<img src="images/ERD.png" alt="ERD">
 </div>
 
 ### Testing
