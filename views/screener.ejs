@@ -10,13 +10,11 @@
 
 <body>
   <style>
-    /* Add a black background color to the top navigation bar */
     .topnav {
       overflow: hidden;
       background-color: rgb(44, 62, 80);
     }
 
-    /* Style the links inside the navigation bar */
     .topnav a {
       float: left;
       display: block;
@@ -27,19 +25,16 @@
       font-size: 17px;
     }
 
-    /* Change the color of links on hover */
     .topnav a:hover {
       background-color: #ddd;
       color: black;
     }
 
-    /* Style the "active" element to highlight the current page */
     .topnav a.active {
-      background-color: #2196F3;
+      background-color: rgb(41, 128, 185);
       color: white;
     }
 
-    /* Style the search box inside the navigation bar */
     .topnav input[type=text] {
       float: right;
       padding: 6px;
@@ -49,7 +44,7 @@
       font-size: 17px;
     }
 
-    /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
+
     @media screen and (max-width: 600px) {
 
       .topnav a,
@@ -86,6 +81,7 @@
 
     body {
       background-color: #161B23;
+      font-family: "Roboto", sans-serif;
     }
 
 
@@ -383,12 +379,43 @@
       grid-template-columns: 1fr;
       grid-template-rows: 1.2fr 0.8fr;
       gap: 0px 0px;
+      grid-auto-flow: row;
       grid-template-areas:
-        "."
-        ".";
+        "NAME"
+        "PRESETS";
       grid-area: HEADER;
+    }
+
+    .PRESETS {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "PRESET-1 PRESET-2 PRESET-3";
+      grid-area: PRESETS;
       margin: auto;
-      font-size: 300%;
+    }
+
+
+    .PRESET-1 {
+      grid-area: PRESET-1;
+    }
+
+    .PRESET-2 {
+      grid-area: PRESET-2;
+    }
+
+    .PRESET-3 {
+      grid-area: PRESET-3;
+    }
+
+    .NAME {
+      grid-area: NAME;
+      text-align: center;
+      margin: auto;
+      font-size: 220%;
     }
 
     .SUMBIT {
@@ -451,9 +478,18 @@
     }
 
     .button {
-      background-color: DodgerBlue;
+      background-color: rgb(41, 128, 185);
       color: #fff;
       font-size: 300%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .buttonsmall {
+      background-color: rgb(41, 128, 185);
+      color: #fff;
+      font-size: 200%;
+      width: 100%;
       border-radius: 6px;
       cursor: pointer;
     }
@@ -482,7 +518,74 @@
     }
 
     .picked {
-      background-color: DodgerBlue;
+      background-color: rgb(41, 128, 185);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .tooltip .tooltiptext-right {
+      font-family: "Roboto", sans-serif;
+      font-size: 12px;
+      visibility: hidden;
+      width: 240px;
+      color: #EEEFEF;
+      background-color: rgb(33, 33, 33);
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+      top: -5px;
+      left: 75%;
+
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .tooltip:hover .tooltiptext-right {
+      visibility: visible;
+    }
+
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext-top {
+      font-family: "Roboto", sans-serif;
+      font-size: 12px;
+      visibility: hidden;
+      width: 240px;
+      color: #EEEFEF;
+      background-color: rgb(33, 33, 33);
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -120px;
+
+      /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .tooltip:hover .tooltiptext-right {
+      visibility: visible;
+      opacity: 1;
+    }
+
+
+    .tooltip:hover .tooltiptext-top {
+      visibility: visible;
+      opacity: 1;
     }
   </style>
 
@@ -495,7 +598,9 @@
   <div class="container">
     <div class="FITLER">
       <div class="FILTER-1 round">
-        <div class="FILTER-1-NAME names">P/E ratio</div>
+        <div class="FILTER-1-NAME names tooltip">P/E ratio<span class="tooltiptext-top">The P/E
+            ratio is the ratio for valuing a company that measures its current share price relative to its earnings per
+            share. The average P/E ratio for a S&P 500 stock is 16. </span></div>
         <div class="FILTER-1-TYPE">
           <div class="select" onchange="Change(1)">
             <select class="drop" id="pe">
@@ -513,7 +618,9 @@
         </div>
       </div>
       <div class="FILTER-2 round">
-        <div class="FILTER-2-NAME names">Dividend %</div>
+        <div class="FILTER-2-NAME names tooltip">Dividend %<span class="tooltiptext-top">A sum of money paid regularly
+            (typically annually) by a company to its shareholders out of its profits (or reserves) represeted as a
+            percentage of the share price.</span></div>
         <div class="FILTER-2-TYPE">
           <div class="select" onchange="Change(2)">
             <select class="drop" id="dividend">
@@ -531,7 +638,9 @@
         </div>
       </div>
       <div class="FILTER-3 round">
-        <div class="FILTER-3-NAME names"> Earnings Per Share</div>
+        <div class="FILTER-3-NAME names tooltip"> Earnings Per Share<span class="tooltiptext-top"> EPS is calculated
+            as a company's profit divided by the outstanding shares of its common stock. The resulting number serves as
+            an indicator of a company's profitability.</span></div>
         <div class="FILTER-3-TYPE">
           <div class="select" onchange="Change(3)">
             <select class="drop" id="eps">
@@ -549,7 +658,8 @@
         </div>
       </div>
       <div class="FILTER-4 round">
-        <div class="FILTER-4-NAME names"> Volatility</div>
+        <div class="FILTER-4-NAME names tooltip"> Volatility<span class="tooltiptext-top">A statstical measure of the
+            dispersion of returns for a stock. Represents daily high/low trading range.</span></div>
         <div class="FILTER-4-TYPE">
           <div class="select" onchange="Change(4)">
             <select class="drop" id="vol">
@@ -567,7 +677,8 @@
         </div>
       </div>
       <div class="FILTER-5 round">
-        <div class="FILTER-5-NAME names">Share Price</div>
+        <div class="FILTER-5-NAME names tooltip">Share Price<span class="tooltiptext-top"> The price of a single share
+            of a number of saleable equity shares of a company</span></div>
         <div class="FILTER-5-TYPE">
           <div class="select" onchange="Change(5)">
             <select class="drop" id="price">
@@ -585,7 +696,10 @@
         </div>
       </div>
       <div class="FILTER-6 round">
-        <div class="FILTER-6-NAME names">Insider Own %</div>
+        <div class="FILTER-6-NAME names tooltip">Insider Own %<span class="tooltiptext-top">
+            Calculated as the total number of shares owned by insiders. A higher percentage is typically viewed by an
+            investor as a positive for the company, since management would in theory hold a higher percentage of shares
+            if the company's outlook was bright. </span></div>
         <div class="FILTER-6-TYPE">
           <div class="select" onchange="Change(6)">
             <select class="drop" id="insider">
@@ -603,7 +717,10 @@
         </div>
       </div>
       <div class="FILTER-7 round">
-        <div class="FILTER-7-NAME names">Relative strength index</div>
+        <div class="FILTER-7-NAME names tooltip">Relative strength index<span class="tooltiptext-top">A
+            momentum indicator that measures the magnitude of recent price changes to
+            evaluate overbought or oversold conditions of a stock. RSI is considered overbought when above 70 and
+            oversold when below 30.</span></div>
         <div class="FILTER-7-TYPE">
           <div class="select" onchange="Change(7)">
             <select class="drop" id="rsi">
@@ -621,7 +738,9 @@
         </div>
       </div>
       <div class="FILTER-8 round">
-        <div class="FILTER-8-NAME names">7-day Article Sentiment</div>
+        <div class="FILTER-8-NAME names tooltip">7-day Article Sentiment<span class="tooltiptext-top">The sentiment of
+            news articles in the last seven days represented as a value between -1 for very negative and 1 for very
+            positive. The avevarge sentimet is 0.15.</span></div>
         <div class="FILTER-8-TYPE">
           <div class="select" onchange="Change(8)">
             <select class="drop" id="7daysent">
@@ -639,7 +758,10 @@
         </div>
       </div>
       <div class="FILTER-9 round">
-        <div class="FILTER-9-NAME names">Return on Equity</div>
+        <div class="FILTER-9-NAME names tooltip">Return on Equity<span class="tooltiptext-top">a measure of financial
+            performance calculated by dividing net income by shareholders' equity. considered a gauge of a corporation's
+            profitability and how efficient it is in generating profits. Long-term ROE for S&P 500 companies has
+            averaged around 18.6%</span></div>
         <div class="FILTER-9-VALUE">
           <input type="text" id="roe_val" maxlength="4" size="4">
         </div>
@@ -657,7 +779,9 @@
         </div>
       </div>
       <div class="FILTER-10 round">
-        <div class="FILTER-10-NAME names">Analyst Target Price / Share price %</div>
+        <div class="FILTER-10-NAME names tooltip">Analyst Target Price / Share price %<span class="tooltiptext-top"> The
+            mean analyst target price divided by the current stock price depicted as a percentage. An indicator of the
+            expected price increase/decrease by financial analysts.</span></div>
         <div class="FILTER-10-VALUE">
           <input type="text" id="analyst_val" maxlength="4" size="4">
         </div>
@@ -675,7 +799,10 @@
         </div>
       </div>
       <div class="FILTER-11 round">
-        <div class="FILTER-11-NAME names">P/B </div>
+        <div class="FILTER-11-NAME names tooltip">P/B<span class="tooltiptext-top">Measures the market's valuation of a
+            company relative to its book value. The market value of equity is typically higher than the book value of a
+            company, P/B ratio is used by value investors to identify potential investments. P/B ratios under 1 are
+            typically considered solid investments.</span></div>
         <div class="FILTER-11-VALUE">
           <input type="text" id="pb_val" maxlength="4" size="4">
         </div>
@@ -693,7 +820,10 @@
         </div>
       </div>
       <div class="FILTER-12 round">
-        <div class="FILTER-12-NAME names">Return on investment</div>
+        <div class="FILTER-12-NAME names tooltip">Return on investment<span class="tooltiptext-top">ROI is a performance
+            measure used to evaluate the efficiency or profitability of an investment or compare
+            the efficiency of a number of different investments. ROI tries to directly measure the amount of return on a
+            particular investment, relative to the investments cost.</span></div>
         <div class="FILTER-12-VALUE">
           <input type="text" id="roi_val" maxlength="4" size="4">
         </div>
@@ -711,7 +841,14 @@
         </div>
       </div>
     </div>
-    <div class="HEADER"> Stock Screener</div>
+    <div class="HEADER">
+      <div class="NAME">Stock Screener</div>
+      <div class="PRESETS">
+        <div class="PRESET-1"> <button class="buttonsmall" onclick="setPreset(0)">Value</button></div>
+        <div class="PRESET-2"> <button class="buttonsmall" onclick="setPreset(1)">Growth</button></div>
+        <div class="PRESET-3"> <button class="buttonsmall" onclick="setPreset(2)">Oversold</button></div>
+      </div>
+    </div>
     <div class="SUMBIT">
       <div class="SUBMIT-BUTTON">
         <button class="button" onclick="filter()">Submit</button>
@@ -720,19 +857,21 @@
   </div>
 
   <table id="fetch" cellspacing="1" cellpadding="8" class="table">
-    <tr class="round">
-      <th onclick="sortTable(0)">Ticker</th>
-      <th onclick="sortTableNum(1)">Price</th>
-      <th onclick="sortTableNum(2)">P/E</th>
-      <th onclick="sortTableNum(3)">RSI</th>
-      <th onclick="sortTableNum(4)">Target Price</th>
-      <th onclick="sortTableNum(5)">Volatility</th>
-      <th onclick="sortTableNum(6)">EPS</th>
-      <th onclick="sortTableNum(7)">Dividend</th>
-      <th onclick="sortTableNum(8)">ROE</th>
-      <th onclick="sortTableNum(9)">ROI</th>
+    <tr class="round" style="position: sticky; top: 0;">
+      <th onclick="sortTable(0)">Name</th>
+      <th onclick="sortTable(1)">Ticker</th>
+      <th onclick="sortTableNum(2)">Price</th>
+      <th onclick="sortTableNum(3)">P/E</th>
+      <th onclick="sortTableNum(4)">RSI</th>
+      <th onclick="sortTableNum(5)">Target Price %</th>
+      <th onclick="sortTableNum(6)">Volatility</th>
+      <th onclick="sortTableNum(7)">EPS</th>
+      <th onclick="sortTableNum(8)">Dividend</th>
+      <th onclick="sortTableNum(9)">ROE</th>
+      <th onclick="sortTableNum(10)">ROI</th>
       <th onclick="sortTableNum(11)">P/B</th>
-      <th onclick="sortTableNum(12)">Insider Own</th>
+      <th onclick="sortTableNum(12)">Insider Own %</th>
+      <th onclick="sortTableNum(13)">7-day Sentiment</th>
     </tr>
 </body>
 <script>
@@ -748,11 +887,12 @@
   }
 
   metric = [
+    "Name",
     "Ticker",
     "Price",
     "P/E",
     "RSI (14)",
-    "Target Price",
+    "Target Price %",
     "Volatility",
     "EPS (ttm)",
     "Dividend %",
@@ -760,6 +900,7 @@
     "ROI",
     "P/B",
     "Insider Own",
+    "7-day Sent"
   ]
 
   very_negative_color = 'rgb(192, 57, 43)';
@@ -767,6 +908,36 @@
   neutral_color = 'rgb(243, 156, 18)';
   positive_color = 'rgb(39, 174, 96)';
   very_positive_color = 'rgb(22, 160, 133)';
+
+  var presets = [['pe', 2, 30, "pb", 2, 8], ["pe", 1, 50, "analyst", 1, 20], ["vol", 1, 5, "rsi", 2, 40, "7daysent", 2, 0.3]]
+  function setPreset(num) {
+    var preset = presets[num]
+    console.log(preset)
+
+    for (i = 0; i < Object.keys(preset).length; i = i + 3) {
+
+
+
+      var select = document.getElementById(preset[i])
+      var val = document.getElementById(preset[i] + "_val")
+
+
+
+      select.value = preset[i + 1]
+      val.value = preset[i + 2]
+
+    }
+
+    for (i = 1; i < 12; i++) {
+      Change(i)
+    }
+
+
+
+
+
+
+  }
 
   function getMetricColor(type, value) {
     if (type == "P/B") {
@@ -783,8 +954,12 @@
       else if (value > 20) return positive_color
       else return very_positive_color
     }
-    if (type == "Target Price") {
-      return neutral_color
+    if (type == "Target Price %") {
+      if (value < -10) return very_negative_color;
+      else if (value < 0) return negative_color;
+      else if (value < 15) return neutral_color;
+      else if (value < 30) return positive_color
+      else return very_positive_color
     }
     if (type == "RSI (14)") {
       if (value < 22) return very_positive_color;
@@ -837,6 +1012,20 @@
       else if (value > 0) return negative_color
       else return very_negative_color
     }
+    if (type == "7-day Sent") {
+      if (value > 0.3) return very_positive_color;
+      else if (value > 0.25) return positive_color;
+      else if (value > 0.15) return neutral_color;
+      else if (value > 0.08) return negative_color
+      else return very_negative_color
+    }
+    if (type == "Insider Own") {
+      if (value > 5) return very_positive_color;
+      else if (value > 4) return positive_color;
+      else if (value > 2) return neutral_color;
+      else if (value > 0.5) return negative_color
+      else return very_negative_color
+    }
 
   }
 
@@ -853,6 +1042,7 @@
     var daysent = document.getElementById("7daysent").value;
     var roe = document.getElementById("roe").value;
     var analyst = document.getElementById("analyst").value;
+    var pb = document.getElementById("pb").value;
     if (pe != 0) {
       var pe_val = document.getElementById("pe_val").value;
       if (pe == 1) {
@@ -987,7 +1177,22 @@
     }
 
     if (daysent != 0) {
-
+      var val = document.getElementById("7daysent_val").value;
+      if (daysent == 1) {
+        var result = result.filter(function (value, index, arr) {
+          return value["7-day Sent"] > val;
+        });
+      }
+      else if (daysent == 2) {
+        var result = result.filter(function (value, index, arr) {
+          return value["7-day Sent"] < val;
+        });
+      }
+      else {
+        var result = result.filter(function (value, index, arr) {
+          return value["7-day Sent"] == val;
+        });
+      }
     }
 
     if (roe != 0) {
@@ -1010,24 +1215,39 @@
     }
 
     if (analyst != 0) {
-
-    }
-
-    if (roe != 0) {
-      var val = document.getElementById("roe_val").value;
-      if (roe == 1) {
+      var val = document.getElementById("analyst_val").value;
+      if (analyst == 1) {
         var result = result.filter(function (value, index, arr) {
-          return value["ROE"] > val;
+          return value["Target Price %"] > val;
         });
       }
-      else if (roe == 2) {
+      else if (analyst == 2) {
         var result = result.filter(function (value, index, arr) {
-          return value["ROE"] < val;
+          return value["Target Price %"] < val;
         });
       }
       else {
         var result = result.filter(function (value, index, arr) {
-          return value["ROE"] == val;
+          return value["Target Price %"] == val;
+        });
+      }
+    }
+
+    if (pb != 0) {
+      var val = document.getElementById("pb_val").value;
+      if (pb == 1) {
+        var result = result.filter(function (value, index, arr) {
+          return value["P/B"] > val;
+        });
+      }
+      else if (pb == 2) {
+        var result = result.filter(function (value, index, arr) {
+          return value["P/B"] < val;
+        });
+      }
+      else {
+        var result = result.filter(function (value, index, arr) {
+          return value["P/B"] == val;
         });
       }
     }

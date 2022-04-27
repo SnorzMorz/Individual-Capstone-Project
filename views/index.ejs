@@ -634,6 +634,7 @@
     .container {
       height: 100%;
       margin: 0;
+      font-family: "Roboto", sans-serif;
 
     }
 
@@ -654,19 +655,16 @@
       font-size: 17px;
     }
 
-    /* Change the color of links on hover */
     .topnav a:hover {
       background-color: #ddd;
       color: black;
     }
 
-    /* Style the "active" element to highlight the current page */
     .topnav a.active {
-      background-color: #2196F3;
+      background-color: rgb(41, 128, 185);
       color: white;
     }
 
-    /* Style the search box inside the navigation bar */
     .topnav input[type=text] {
       float: right;
       padding: 6px;
@@ -676,7 +674,6 @@
       font-size: 17px;
     }
 
-    /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
     @media screen and (max-width: 600px) {
 
       .topnav a,
@@ -945,6 +942,10 @@
         font-size: 80%;
       }
 
+      .hidden {
+        display: none;
+      }
+
     }
   </style>
 
@@ -1064,9 +1065,8 @@
       <div class="TICKER" style="padding-top: 16%; font-size: 200%; text-shadow: 6px 2px 4px rgba(0, 0, 0, 0.50);">
       </div>
       <div class="PE">
-        <div class="PE-NAME name tooltip">P/E Ratio<span class="tooltiptext-right">The price-to-earnings
-            ratio (P/E
-            ratio) is
+        <div class="PE-NAME name tooltip">P/E Ratio<span class="tooltiptext-right">The P/E
+            ratio is
             the ratio for valuing a company that measures its current share price relative to its earnings per
             share</span></div>
         <div class="PE-VAL" style="font-size: 140%; text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);"></div>
@@ -1086,10 +1086,10 @@
         </div>
       </div>
       <div class="RSI">
-        <div class="RSI-NAME name tooltip">RSI (14)<span class="tooltiptext-top">The relative strength index is a
+        <div class="RSI-NAME name tooltip">RSI (14)<span class="tooltiptext-top">A
             momentum indicator that measures the magnitude of recent price changes to
             evaluate overbought or oversold conditions of a stock. RSI is considered overbought when above 70 and
-            oversold when below 30</span></div>
+            oversold when below 30.</span></div>
         <div class="RSI-VAL">
           <div class="gauge" id="rsi_gauge">
             <div class="gauge__body">
@@ -1113,7 +1113,7 @@
       </div>
       <div class="VOLATILITY">
         <div class="VOLATILITY-NAME name tooltip">Volatility <span class="tooltiptext-top">A statstical measure of the
-            dispersion of returns for a stock. Represents daily high/low trading range</span></div>
+            dispersion of returns for a stock. Represents daily high/low trading range.</span></div>
         <div class="VOLATILITY-VAL">
           <div class="gauge" id="volatility_gauge">
             <div class="gauge__body">
@@ -1132,6 +1132,26 @@
 
 
       var ticker = "<%= ticker %>";
+
+
+
+      const Http0 = new XMLHttpRequest();
+      const url0 = '/stock_names';
+      Http0.open("GET", url0);
+      Http0.send();
+      Http0.onreadystatechange = (e) => {
+        if (list.length === 0) {
+          var stocks = JSON.parse(Http0.responseText)
+          stocks = stocks[0]["Tickers"]
+          console.log(stocks)
+
+          if (!stocks.includes(ticker)) {
+            window.open("/?stock=" + ticker, "_self");
+          }
+
+
+        }
+      }
 
       very_negative_color = 'rgb(192, 57, 43)';
       negative_color = 'rgb(231, 76, 60)';
@@ -1288,11 +1308,24 @@
             number * 100
           )}%`;
         }
-        console.log(info)
 
         document.getElementsByClassName("INSIDER-OWN-VAL")[0].innerHTML = info[0]["Insider Own"] + "%";
-        
-        if(info[0]["Insider Own"] < 1.0)
+
+        if (info[0]["Insider Own"] < 1.0) {
+          document.getElementsByClassName("INSIDER-OWN-VAL")[0].style.color = very_negative_color
+        }
+        else if (info[0]["Insider Own"] < 3.0) {
+          document.getElementsByClassName("INSIDER-OWN-VAL")[0].style.color = negative_color
+        }
+        else if (info[0]["Insider Own"] < 5.0) {
+          document.getElementsByClassName("INSIDER-OWN-VAL")[0].style.color = neutral_color
+        }
+        else if (info[0]["Insider Own"] < 8.0) {
+          document.getElementsByClassName("INSIDER-OWN-VAL")[0].style.color = positive_color
+        }
+        else {
+          document.getElementsByClassName("INSIDER-OWN-VAL")[0].style.color = very_positive_color
+        }
 
         document.getElementsByClassName("PRICE-VAL")[0].innerHTML = info[0]["Price"] + "$";
         //document.getElementsByClassName("VOLATILITY-VAL")[0].innerHTML = info[0]["Volatility"] + "%";
@@ -1304,11 +1337,11 @@
           document.getElementsByClassName("PE-VAL")[0].innerHTML = info[0]["P/E"];
           value = info[0]["P/E"];
 
-            if (value > 100) document.getElementsByClassName("PE-VAL")[0].style.color = very_negative_color;
-            else if (value > 40) document.getElementsByClassName("PE-VAL")[0].style.color = negative_color;
-            else if (value > 30) document.getElementsByClassName("PE-VAL")[0].style.color = neutral_color;
-            else if (value > 20) document.getElementsByClassName("PE-VAL")[0].style.color = positive_color;
-            else return document.getElementsByClassName("PE-VAL")[0].style.color = very_positive_color;
+          if (value > 100) document.getElementsByClassName("PE-VAL")[0].style.color = very_negative_color;
+          else if (value > 40) document.getElementsByClassName("PE-VAL")[0].style.color = negative_color;
+          else if (value > 30) document.getElementsByClassName("PE-VAL")[0].style.color = neutral_color;
+          else if (value > 20) document.getElementsByClassName("PE-VAL")[0].style.color = positive_color;
+          else document.getElementsByClassName("PE-VAL")[0].style.color = very_positive_color;
         }
         document.getElementsByClassName("TICKER")[0].innerHTML = info[0]["Ticker"];
         //Dividend
@@ -1393,6 +1426,11 @@
           target_price.style.color = very_negative_color
         }
       }
+
+      const positive_ratings = ["Overweight", "Outperform", "Market Outperform"];
+      const very_positive_ratings = ["Buy"];
+      const very_negative_ratings = ["Sell"];
+      const negative_ratings = ["Underweight", "Underperform"];
 
       analyst_dates = []
       positive = []
@@ -1515,10 +1553,7 @@
           "July", "August", "September", "October", "November", "December"
         ];
 
-        const positive_ratings = ["Overweight", "Outperform", "Market Outperform"];
-        const very_positive_ratings = ["Buy"];
-        const very_negative_ratings = ["Sell"];
-        const negative_ratings = ["Underweight"];
+
 
 
         analyst_latest = analyst_latest[0]
@@ -1804,7 +1839,7 @@
                 backgroundColor: 'rgb(41, 128, 185)',
                 borderColor: 'rgb(41, 128, 185)',
                 data: prediction[0]["Prediction"],
-                lineTension: 0.2,
+                lineTension: 0,
                 pointRadius: 2,
                 pointHoverRadius: 10,
                 spanGaps: true,
@@ -1814,7 +1849,7 @@
                 backgroundColor: 'rgb(39, 174, 96, 0.2)',
                 borderColor: 'rgb(39, 174, 96)',
                 data: upper,
-                lineTension: 0.5,
+                lineTension: 0,
                 pointRadius: 2,
                 pointHoverRadius: 10,
                 fill: '-1',
@@ -1825,7 +1860,7 @@
                 backgroundColor: 'rgb(231, 76, 60, 0.2)',
                 borderColor: negative_color,
                 data: lower,
-                lineTension: 0.5,
+                lineTension: 0,
                 pointRadius: 2,
                 pointHoverRadius: 10,
                 fill: '-1',
